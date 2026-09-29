@@ -1,0 +1,207 @@
+---
+import Icon from "./Icon.astro";
+
+const directions = [
+  {
+    number: "01",
+    title: "Characterize the particles.",
+    titleZh: "表征颗粒性质。",
+    text: "Measure zeta potential and particle size across selected media, documenting the conditions behind each result.",
+    textZh: "测量不同介质中的 Zeta 电位与粒径，记录每项结果对应的实验条件。",
+    focus: "Particle properties · Measurement conditions",
+    focusZh: "颗粒属性 · 测量条件",
+  },
+  {
+    number: "02",
+    title: "Observe concentration over time.",
+    titleZh: "观察浓度变化。",
+    text: "Track concentration profiles under defined solution and channel conditions to explore how particle distributions change.",
+    textZh: "在明确的溶液与通道条件下观察浓度分布，探索颗粒分布随时间的变化。",
+    focus: "Concentration profiles · Time dependence",
+    focusZh: "浓度分布 · 时间变化",
+  },
+  {
+    number: "03",
+    title: "Compare models with measurements.",
+    titleZh: "对照模型与实测。",
+    text: "Bring experimental observations and calculated profiles together to assess assumptions, refine parameters, and identify model limits.",
+    textZh:
+      "将实验观察与计算曲线进行比较，评估假设、修正参数，并明确模型的适用范围。",
+    focus: "Experimental evidence · Model refinement",
+    focusZh: "实验证据 · 模型优化",
+  },
+];
+---
+
+<section
+  class="section experiments-section"
+  id="experiments"
+  aria-labelledby="experiments-heading"
+>
+  <div class="container experiments-layout">
+    <div class="experiment-intro">
+      <span class="eyebrow" data-zh="实验展示">
+        EXPERIMENTS
+      </span>
+      <h2 id="experiments-heading">
+        <span class="experiment-heading-start" data-zh="从模型，">
+          From models
+        </span>
+        <br />
+        <span data-zh="走向实测。">to measurements.</span>
+      </h2>
+      <p data-zh="我们计划通过实验，将颗粒性质与实际观察到的传输行为联系起来，检验假设、理解差异，并为下一轮模型改进提供依据。">
+        We’re planning experiments to connect particle properties with observed
+        transport behavior. The goal is to test assumptions, understand
+        differences, and guide the next iteration of the model.
+      </p>
+      <div class="experiment-status">
+        <span aria-hidden="true"></span>
+        <span data-zh="实验验证规划中">Validation studies planned</span>
+      </div>
+      <button
+        class="text-button"
+        data-project-trigger
+        data-project-interest="Research partnership"
+      >
+        <span data-zh="讨论实验合作">Discuss an experiment</span>
+        <Icon name="arrow" size={19} />
+      </button>
+    </div>
+
+    <div class="experiment-directions">
+      {directions.map((direction) => (
+        <article class="experiment-row">
+          <span class="experiment-number" aria-hidden="true">
+            {direction.number}
+          </span>
+          <div>
+            <h3 data-zh={direction.titleZh}>{direction.title}</h3>
+            <p data-zh={direction.textZh}>{direction.text}</p>
+            <span class="experiment-focus" data-zh={direction.focusZh}>
+              {direction.focus}
+            </span>
+          </div>
+        </article>
+      ))}
+      <p
+        class="experiment-note"
+        data-zh="随着研究推进，我们将在这里分享实验方法、观察记录与结果。"
+      >
+        We’ll share experimental methods, observations, and results here as the
+        studies progress.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .experiments-section {
+    background: #f2f5fc;
+    border-block: 1px solid var(--line);
+  }
+  :global(:root[data-theme="dark"]) .experiments-section {
+    background: #101b2d;
+  }
+  .experiments-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    align-items: start;
+    gap: 80px;
+  }
+  .experiment-heading-start {
+    color: var(--ink);
+  }
+  .experiment-intro > p {
+    font-size: 13px;
+    line-height: 1.9;
+    max-width: 410px;
+    margin-top: 24px;
+  }
+  .experiment-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 11px;
+    margin-top: 24px;
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    color: var(--blue);
+    font-size: 10px;
+  }
+  .experiment-status > span:first-child {
+    width: 5px;
+    height: 5px;
+    background: currentColor;
+    border-radius: 50%;
+  }
+  .experiment-intro > button {
+    display: flex;
+    margin-top: 28px;
+  }
+  .experiment-row {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 22px;
+    padding: 29px 0;
+    border-top: 1px solid var(--line);
+  }
+  .experiment-row:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+  .experiment-number {
+    color: var(--blue);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    padding-top: 5px;
+  }
+  .experiment-row h3 {
+    font-size: 23px;
+    line-height: 1.4;
+  }
+  .experiment-row p {
+    font-size: 12px;
+    line-height: 1.9;
+    margin-top: 12px;
+  }
+  .experiment-focus {
+    display: block;
+    margin-top: 14px;
+    color: var(--blue);
+    font-size: 10px;
+  }
+  .experiment-note {
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+    font-size: 11px;
+    line-height: 1.8;
+  }
+  @media (max-width: 1100px) {
+    .experiments-layout {
+      gap: 48px;
+    }
+  }
+  @media (max-width: 899px) {
+    .experiments-layout {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+    .experiment-intro > p {
+      max-width: 580px;
+    }
+  }
+  @media (max-width: 600px) {
+    .experiment-row {
+      grid-template-columns: 23px minmax(0, 1fr);
+      gap: 16px;
+      padding-block: 25px;
+    }
+    .experiment-row h3 {
+      font-size: 22px;
+    }
+    .experiment-intro > p {
+      font-size: 12px;
+    }
+  }
+</style>
