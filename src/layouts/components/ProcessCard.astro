@@ -7,8 +7,13 @@ interface Props {
   title: string;
   text: string;
   note: string;
+  zh: {
+    title: string;
+    text: string;
+    note: string;
+  };
 }
-const { number, icon, title, text, note } = Astro.props;
+const { number, icon, title, text, note, zh } = Astro.props;
 ---
 
 <article class="process-card">
@@ -16,7 +21,9 @@ const { number, icon, title, text, note } = Astro.props;
     <span>{number}</span>
     <Icon name={icon} size={25} />
   </div>
-  <h3>{title}</h3>
-  <p>{text}</p>
-  <span class="step-note">{note}</span>
+  <h3 data-zh={zh.title}>{title}</h3>
+  <p data-zh={zh.text}>{text}</p>
+  <span class="step-note" data-zh={zh.note}>
+    {note}
+  </span>
 </article>

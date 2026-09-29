@@ -1,8 +1,8 @@
 # Fluid Fabs
 
-**AI-designed microfluidics, manufactured on demand.**
+**Particle behavior, made visible.**
 
-Fluid Fabs makes custom 3D-printed microfluidic chips more affordable for researchers. Explore our approach, applications, and work from the lab.
+Fluid Fabs is an early-stage particle-modeling concept for biotech R&D. The website pairs published zeta potential and particle-size measurements with illustrative diffusion calculations, keeping literature evidence and modeling assumptions distinct.
 
 ## Run locally
 

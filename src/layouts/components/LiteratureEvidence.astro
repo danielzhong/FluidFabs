@@ -1,0 +1,353 @@
+---
+import {
+  PARTICLE_OBSERVATIONS,
+  LITERATURE_SOURCES,
+  LITERATURE_CHECKED_ON,
+} from "../../content/literature/particles";
+import { classifyZeta } from "../../lib/particleModel";
+import { withBase } from "../../lib/paths";
+const systems = PARTICLE_OBSERVATIONS.filter(
+  (r, i, all) => all.findIndex((x) => x.particleId === r.particleId) === i,
+);
+const x = (z: number) => 12 + ((z + 80) / 180) * 416;
+const signed = (n: number) => (n > 0 ? `+${n}` : String(n).replace("-", "−"));
+---
+
+<div class="literature-evidence" id="literature">
+  <div class="lit-topline">
+    <span class="micro-label" data-zh="文献中的实测值">
+      MEASURED IN PUBLISHED RESEARCH
+    </span>
+    <span data-zh="2 篇研究 · 12 条观测">2 studies · 12 observations</span>
+  </div>
+  <div class="lit-heading">
+    <div>
+      <h3 data-zh="同类颗粒。不同介质。">
+        Same particle system. Different media.
+      </h3>
+      <p data-zh="比较原论文报告的 ζ 电位及误差。这里是研究用脂质体和磁性颗粒，不是获批药物目录，也不是 Fluid Fabs 自测数据。">
+        Compare reported ζ values and their spread. These are research liposomes
+        and magnetic particles, not a catalog of approved drugs or measurements
+        made by Fluid Fabs.
+      </p>
+    </div>
+    <a
+      class="text-button"
+      href={withBase("/data/particle-observations.csv")}
+      download="fluid-fabs-literature.csv"
+    >
+      <span data-zh="下载文献数据 CSV">Download data CSV</span>
+      <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+  <div class="lit-filters">
+    <div>
+      <label for="lit-system" data-zh="颗粒体系">
+        Particle system
+      </label>
+      <select id="lit-system" disabled>
+        {systems.map((p) => (
+          <option value={p.particleId} data-zh={p.particleLabelZh}>
+            {p.particleLabel}
+          </option>
+        ))}
+      </select>
+    </div>
+    <div>
+      <label for="lit-range" data-zh="按报告均值筛选 ζ 区间">
+        Filter ζ range by reported mean
+      </label>
+      <select id="lit-range" disabled>
+        <option value="all" data-zh="全部区间">
+          All ranges
+        </option>
+        <option value="negative" data-zh="ζ < −10 mV">
+          ζ &lt; −10 mV
+        </option>
+        <option value="near-neutral" data-zh="−10 ≤ ζ ≤ 10 mV">
+          −10 ≤ ζ ≤ 10 mV
+        </option>
+        <option value="positive" data-zh="ζ > 10 mV">
+          ζ &gt; 10 mV
+        </option>
+      </select>
+    </div>
+  </div>
+  <p
+    class="lit-filter-note"
+    data-zh="±10 mV 仅用于浏览分组，不是通用稳定性阈值。每条记录代表特定制备物与介质；误差条保留原表的统计定义。"
+  >
+    ±10 mV are browsing boundaries, not universal stability thresholds. Each
+    record belongs to a specific preparation and medium; spread bars retain the
+    source’s statistical definition.
+  </p>
+  <div
+    class="lit-comparison"
+    aria-label="Published zeta potential comparison"
+    data-zh-aria-label="文献 ζ 电位对照"
+  >
+    {PARTICLE_OBSERVATIONS.map((r) => (
+      <div
+        class="lit-measurement"
+        data-lit-record={r.id}
+        data-system={r.particleId}
+        data-range={classifyZeta(r.zetaMv)}
+        hidden={r.particleId !== "fl"}
+      >
+        <span class="lit-medium" data-zh={r.mediumZh}>
+          {r.medium}
+        </span>
+        <svg viewBox="0 0 440 32" aria-hidden="true">
+          <line x1="12" x2="428" y1="16" y2="16" class="lit-track" />
+          <line x1={x(0)} x2={x(0)} y1="0" y2="32" class="lit-zero" />
+          <line
+            x1={x(r.zetaMv - r.zetaSpreadMv)}
+            x2={x(r.zetaMv + r.zetaSpreadMv)}
+            y1="16"
+            y2="16"
+            class="lit-spread"
+          />
+          <line
+            x1={x(r.zetaMv - r.zetaSpreadMv)}
+            x2={x(r.zetaMv - r.zetaSpreadMv)}
+            y1="10"
+            y2="22"
+            class="lit-spread"
+          />
+          <line
+            x1={x(r.zetaMv + r.zetaSpreadMv)}
+            x2={x(r.zetaMv + r.zetaSpreadMv)}
+            y1="10"
+            y2="22"
+            class="lit-spread"
+          />
+          <circle cx={x(r.zetaMv)} cy="16" r="4.5" class="lit-point" />
+        </svg>
+        <strong>
+          {signed(r.zetaMv)} ± {r.zetaSpreadMv} <span>mV</span>
+        </strong>
+      </div>
+    ))}
+    <div class="lit-chart-axis">
+      <span></span>
+      <svg viewBox="0 0 440 24" aria-hidden="true">
+        {[-80, -40, 0, 40, 80].map((z) => (
+          <text x={x(z)} y="17" text-anchor="middle">
+            {signed(z)}
+          </text>
+        ))}
+      </svg>
+      <span>ζ (mV)</span>
+    </div>
+    <p
+      class="lit-empty"
+      data-lit-empty
+      hidden
+      data-zh="该颗粒体系在此区间没有已收录的观测；可以切换体系或选择全部区间。"
+    >
+      No curated observations for this system in that range. Choose another
+      system or show all ranges.
+    </p>
+  </div>
+  {systems.map((system) => {
+    const source =
+      LITERATURE_SOURCES[system.sourceId as keyof typeof LITERATURE_SOURCES];
+    return (
+      <div
+        class="lit-context"
+        data-lit-context={system.particleId}
+        hidden={system.particleId !== "fl"}
+      >
+        <div>
+          <span class="lit-formulation">{system.formulation}</span>
+          <p data-zh={system.uncertaintyLabelZh}>{system.uncertaintyLabel}</p>
+        </div>
+        <a href={source.tableUrl} target="_blank" rel="noopener noreferrer">
+          {source.authors} ({source.year}) ·{" "}
+          <span data-zh={source.tableLabel.replace("Table", "表")}>
+            {source.tableLabel}
+          </span>{" "}
+          ↗
+        </a>
+      </div>
+    );
+  })}
+  <p class="lit-live" role="status" aria-live="polite" data-lit-status></p>
+  <details class="lit-records">
+    <summary>
+      <span data-zh="查看全部数值、测量条件与来源">
+        All measurements, conditions &amp; sources
+      </span>
+      <span aria-hidden="true">+</span>
+    </summary>
+    <div class="lit-record-body">
+      <p data-zh="“未报告”表示该测量的条件未在已核查的原表或方法中明确给出，不用模型假设补齐。原文中的粒径定义不同，不能直接作为同一种指标合并。">
+        “Not reported” means the condition was not explicit for that measurement
+        in the checked table or methods. Model assumptions do not fill those
+        gaps. Size definitions differ between papers and should not be pooled as
+        one measure.
+      </p>
+      <div
+        class="lit-table-scroll"
+        tabindex="0"
+        role="region"
+        aria-label="Published particle measurements table"
+        data-zh-aria-label="文献颗粒测量数据表"
+      >
+        <table>
+          <caption data-zh="原文数值，按颗粒与介质分别保留">
+            Published values, preserved by particle and medium
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col" data-zh="颗粒">
+                Particle
+              </th>
+              <th scope="col" data-zh="介质">
+                Medium
+              </th>
+              <th scope="col">ζ (mV)</th>
+              <th scope="col" data-zh="粒径（nm）">
+                Size (nm)
+              </th>
+              <th scope="col">pH</th>
+              <th scope="col" data-zh="来源">
+                Source
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {PARTICLE_OBSERVATIONS.map((r) => {
+              const source =
+                LITERATURE_SOURCES[
+                  r.sourceId as keyof typeof LITERATURE_SOURCES
+                ];
+              return (
+                <tr data-literature-row={r.id}>
+                  <th scope="row" data-zh={r.particleLabelZh}>
+                    {r.particleLabel}
+                  </th>
+                  <td data-zh={r.mediumZh}>{r.medium}</td>
+                  <td class="lit-number">
+                    {signed(r.zetaMv)} ± {r.zetaSpreadMv}
+                  </td>
+                  <td class="lit-number">
+                    {r.diameterNm} ± {r.diameterSpreadNm}
+                    <small data-zh={r.diameterBasisZh}>{r.diameterBasis}</small>
+                  </td>
+                  <td>{r.ph ?? <span data-zh="未报告">Not reported</span>}</td>
+                  <td>
+                    <a
+                      href={source.tableUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {source.year} ·{" "}
+                      <span data-zh={source.tableLabel.replace("Table", "表")}>
+                        {source.tableLabel}
+                      </span>{" "}
+                      ↗
+                    </a>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p
+        class="lit-table-note"
+        data-zh="本次收录的 ζ / DLS 测量温度均未明确报告；演示计算使用的 25 °C 不属于原文实测条件。"
+      >
+        The ζ/DLS measurement temperature is not explicitly reported for these
+        selected records. The calculation’s assumed 25 °C is not a reported
+        experimental condition.
+      </p>
+      <div class="lit-sources">
+        {Object.values(LITERATURE_SOURCES).map((s) => (
+          <article>
+            <h4>
+              {s.authors} · {s.year}
+            </h4>
+            <a
+              class="lit-source-title"
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {s.title}
+            </a>
+            <p data-zh={s.methodZh}>{s.method}</p>
+            <p data-zh={s.conditionsZh}>{s.conditions}</p>
+            <div>
+              <a
+                href={`https://doi.org/${s.doi}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                DOI: {s.doi}
+              </a>{" "}
+              ·{" "}
+              <a href={s.licenseUrl} target="_blank" rel="noopener noreferrer">
+                CC BY 4.0
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p class="lit-provenance">
+        <span data-zh="原表数值经核对后重新排版，未从图片估读。核查日期：">
+          Table values checked and reformatted; no values estimated from
+          figures. Checked:{" "}
+        </span>
+        {LITERATURE_CHECKED_ON} ·{" "}
+        <a
+          href={withBase("/data/particle-observations.json")}
+          data-zh="查看完整 JSON"
+        >
+          Full data JSON
+        </a>
+      </p>
+    </div>
+  </details>
+  <noscript>
+    <p class="lit-filter-note">
+      JavaScript is off. The chart shows FL liposomes; all 12 records and
+      sources are available in the expandable table.
+    </p>
+  </noscript>
+</div>
+<script>
+  import { localize, LANGUAGE_CHANGE_EVENT } from "../../lib/i18n";
+  const root = document.querySelector<HTMLElement>("#literature");
+  if (root) {
+    const system = root.querySelector<HTMLSelectElement>("#lit-system")!;
+    const range = root.querySelector<HTMLSelectElement>("#lit-range")!;
+    const rows = root.querySelectorAll<HTMLElement>("[data-lit-record]");
+    const status = root.querySelector<HTMLElement>("[data-lit-status]")!;
+    const render = (announce = false) => {
+      let count = 0;
+      rows.forEach((row) => {
+        row.hidden =
+          row.dataset.system !== system.value ||
+          (range.value !== "all" && row.dataset.range !== range.value);
+        if (!row.hidden) count++;
+      });
+      root
+        .querySelectorAll<HTMLElement>("[data-lit-context]")
+        .forEach((el) => (el.hidden = el.dataset.litContext !== system.value));
+      root.querySelector<HTMLElement>("[data-lit-empty]")!.hidden = count !== 0;
+      if (announce)
+        status.textContent = localize(
+          `${count} published observations shown.`,
+          `显示 ${count} 条文献观测。`,
+        );
+    };
+    system.addEventListener("change", () => render(true));
+    range.addEventListener("change", () => render(true));
+    window.addEventListener(LANGUAGE_CHANGE_EVENT, () => render(true));
+    system.disabled = false;
+    range.disabled = false;
+    render();
+  }
+</script>

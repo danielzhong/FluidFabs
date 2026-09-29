@@ -13,7 +13,8 @@ const contactEmail = site.email;
   <button
     class="dialog-close"
     type="button"
-    aria-label="Close project inquiry"
+    aria-label="Close partnership inquiry"
+    data-zh-aria-label="关闭合作咨询"
     data-project-close
   >
     <svg
@@ -33,22 +34,33 @@ const contactEmail = site.email;
   </button>
 
   <div class="dialog-heading">
-    <span class="dialog-eyebrow">LET’S BUILD YOUR NEXT EXPERIMENT</span>
-    <h2 id="project-dialog-title">Start with an idea.</h2>
-    <p id="project-dialog-description">
-      Tell us what you’re working on. We’ll explore the design, materials, and
-      next steps together.
+    <span class="dialog-eyebrow" data-zh="一起探索颗粒建模的下一步">
+      HELP SHAPE WHAT’S NEXT
+    </span>
+    <h2 id="project-dialog-title" data-zh="与 Fluid Fabs 开启交流。">
+      Connect with Fluid Fabs.
+    </h2>
+    <p
+      id="project-dialog-description"
+      data-zh="选择合作试点、投资方演示、产品更新或研究合作，也可以补充你希望讨论的问题。"
+    >
+      Choose a research pilot, investor walkthrough, product updates, or a
+      partnership discussion. Share any context you’d like us to know.
     </p>
   </div>
 
   <form id="project-inquiry-form">
     <div class="form-row">
       <label>
-        Your name <span aria-hidden="true">*</span>
+        <span class="field-label" data-zh="姓名">
+          Your name
+        </span>{" "}
+        <span aria-hidden="true">*</span>
         <input
           name="name"
           autocomplete="name"
           placeholder="Alex Chen"
+          data-zh-placeholder="陈晓"
           required
           minlength="2"
           maxlength="100"
@@ -56,7 +68,10 @@ const contactEmail = site.email;
         />
       </label>
       <label>
-        Email address <span aria-hidden="true">*</span>
+        <span class="field-label" data-zh="邮箱">
+          Email address
+        </span>{" "}
+        <span aria-hidden="true">*</span>
         <input
           name="email"
           type="email"
@@ -70,46 +85,69 @@ const contactEmail = site.email;
 
     <div class="form-row">
       <label>
-        Organization <span class="optional">Optional</span>
+        <span class="field-label" data-zh="机构">
+          Organization
+        </span>{" "}
+        <span class="optional" data-zh="选填">
+          Optional
+        </span>
         <input
           name="organization"
           autocomplete="organization"
           placeholder="Your company or lab"
+          data-zh-placeholder="你的公司或实验室"
           maxlength="150"
         />
       </label>
       <div>
-        <label for="project-application">Application</label>
+        <label for="project-application" data-zh="感兴趣的方向">
+          Interest
+        </label>
         <select id="project-application" name="application">
-          <option value="Exploring a new idea">Exploring a new idea</option>
-          <option value="Mixing and reaction">Mixing &amp; reaction</option>
-          <option value="Droplet generation">Droplet generation</option>
-          <option value="Cell research">Cell research</option>
-          <option value="Sample preparation">Sample preparation</option>
-          <option value="Other application">Other application</option>
+          <option value="Biotech pilot" data-zh="合作试点">
+            Biotech pilot
+          </option>
+          <option value="Investor walkthrough" data-zh="投资方演示">
+            Investor walkthrough
+          </option>
+          <option value="Product updates" data-zh="产品更新">
+            Product updates
+          </option>
+          <option value="Research partnership" data-zh="研究合作">
+            Research partnership
+          </option>
         </select>
       </div>
     </div>
 
     <label>
-      What would you like to build? <span aria-hidden="true">*</span>
+      <span class="field-label" data-zh="你希望探索什么？">
+        What would you like to explore?
+      </span>{" "}
+      <span class="optional" data-zh="选填">
+        Optional
+      </span>
       <textarea
         name="goals"
         rows="4"
-        placeholder="Describe your experiment, what your chip needs to do, and any design requirements or timeline."
-        required
+        placeholder="Share a research question, available data, or what you’d like to learn about the platform."
+        data-zh-placeholder="分享你的研究问题、已有数据，或希望了解的平台信息。"
         minlength="10"
         maxlength="2000"
         aria-describedby="project-goals-hint"
       ></textarea>
     </label>
-    <p class="field-hint" id="project-goals-hint">
-      A few sentences are enough to get started. * Required fields.
+    <p
+      class="field-hint"
+      id="project-goals-hint"
+      data-zh="姓名和邮箱为必填项；项目背景可选填。"
+    >
+      Name and email are required. Project context is optional.
     </p>
 
     <div class="form-actions">
       <button class="inquiry-submit" type="submit">
-        Prepare email inquiry
+        <span data-zh="生成咨询邮件">Prepare email inquiry</span>
         <svg
           width="18"
           height="18"
@@ -142,11 +180,14 @@ const contactEmail = site.email;
             stroke-linejoin="round"
           />
         </svg>
-        Download brief
+        <span data-zh="下载咨询简介">Download brief</span>
       </button>
     </div>
 
-    <p class="submission-note">
+    <p
+      class="submission-note"
+      data-zh="将在你的邮件应用中生成草稿，由你确认并发送；网站不会自动提交。"
+    >
       Opens your email app with a draft. You review and send it; nothing is
       submitted automatically.
     </p>
@@ -154,18 +195,21 @@ const contactEmail = site.email;
   </form>
 
   <div class="dialog-contact">
-    Prefer to write directly?{" "}
+    <span data-zh="也可以直接发邮件：">Prefer to write directly?</span>{" "}
     <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
   </div>
 </dialog>
 
 <noscript>
   <p class="no-script-contact">
-    Ready to discuss your chip?{" "}
+    <span data-zh="想了解研究试点、投资方演示或产品更新？">
+      Interested in a pilot, investor walkthrough, or product updates?
+    </span>{" "}
     <a
-      href={`mailto:${contactEmail}?subject=${encodeURIComponent(`${site.name} project inquiry`)}`}
+      href={`mailto:${contactEmail}?subject=${encodeURIComponent(`${site.name} partnership inquiry`)}`}
+      data-zh={`请发送咨询邮件至 ${contactEmail}`}
     >
-      Email your project details to {contactEmail}
+      Email your inquiry to {contactEmail}
     </a>
     .
   </p>
@@ -173,6 +217,7 @@ const contactEmail = site.email;
 
 <script>
   import { site } from "../../config/site";
+  import { localize, LANGUAGE_CHANGE_EVENT } from "../../lib/i18n";
 
   const dialog = document.querySelector<HTMLDialogElement>("#project-dialog");
   const form = document.querySelector<HTMLFormElement>("#project-inquiry-form");
@@ -180,6 +225,7 @@ const contactEmail = site.email;
   if (dialog && form) {
     const status = dialog.querySelector<HTMLDivElement>(".inquiry-status");
     const recipient = dialog.dataset.recipient || "";
+    let statusKind: "email" | "download" | null = null;
 
     document.addEventListener("click", (event) => {
       const target = event.target;
@@ -188,6 +234,22 @@ const contactEmail = site.email;
         target.closest("[data-project-trigger]")
       ) {
         event.preventDefault();
+        const interest = target
+          .closest("[data-project-trigger]")
+          ?.getAttribute("data-project-interest");
+        const interestSelect = form.elements.namedItem(
+          "application",
+        ) as HTMLSelectElement;
+        if (
+          interest &&
+          Array.from(interestSelect.options).some(
+            (option) => option.value === interest,
+          )
+        ) {
+          interestSelect.value = interest;
+          statusKind = null;
+          if (status) status.hidden = true;
+        }
         if (!dialog.open) dialog.showModal();
       }
     });
@@ -211,44 +273,76 @@ const contactEmail = site.email;
     const getBrief = () => {
       const fields = new FormData(form);
       const field = (name: string) => String(fields.get(name) ?? "").trim();
+      const application = form.elements.namedItem(
+        "application",
+      ) as HTMLSelectElement;
+      const applicationName =
+        application.selectedOptions[0]?.textContent?.trim() ||
+        field("application");
       return {
-        subject: `${site.name} project inquiry — ${field("name")}`,
+        subject: `${site.name} — ${applicationName} — ${field("name")}`,
         body: [
-          `${site.name} — PROJECT BRIEF`,
-          "AI-designed microfluidics, manufactured on demand",
+          `${site.name} — ${localize("PARTNERSHIP INQUIRY", "合作咨询简介")}`,
+          localize(site.tagline, site.taglineZh),
           "",
-          `Name: ${field("name")}`,
-          `Email: ${field("email")}`,
-          `Organization: ${field("organization") || "Not specified"}`,
-          `Application: ${field("application")}`,
+          `${localize("Name: ", "姓名：")}${field("name")}`,
+          `${localize("Email: ", "邮箱：")}${field("email")}`,
+          `${localize("Organization: ", "机构：")}${field("organization") || localize("Not specified", "未填写")}`,
+          `${localize("Interest: ", "感兴趣的方向：")}${applicationName}`,
           "",
-          "PROJECT GOALS",
-          field("goals"),
+          localize("CONTEXT AND GOALS", "背景与目标"),
+          field("goals") || localize("Not provided", "未填写"),
           "",
-          `Contact: ${recipient}`,
+          `${localize("Contact: ", "联系邮箱：")}${recipient}`,
         ].join("\n"),
       };
     };
 
-    const setStatus = (message: string) => {
-      if (!status) return;
-      status.textContent = message;
+    const renderStatus = () => {
+      if (!status || !statusKind) return;
+      status.textContent =
+        statusKind === "email"
+          ? localize(
+              `Your email draft is ready. Send it from your email app to complete your inquiry. If no email app opens, download your brief and send it to ${recipient}.`,
+              `咨询邮件草稿已准备好，请在邮件应用中发送。如果邮件应用没有打开，可以下载咨询简介并发送至 ${recipient}。`,
+            )
+          : localize(
+              `Your brief is ready to download. Email the file to ${recipient} to share your interest with us.`,
+              `咨询简介已准备好下载。请将文件发送至 ${recipient}，告诉我们你感兴趣的方向。`,
+            );
       status.hidden = false;
     };
 
-    const validateBrief = () => {
+    const setStatus = (kind: "email" | "download") => {
+      statusKind = kind;
+      renderStatus();
+    };
+
+    const updateValidationMessages = (existingOnly = false) => {
       const name = form.elements.namedItem("name") as HTMLInputElement;
       const goals = form.elements.namedItem("goals") as HTMLTextAreaElement;
-      name.setCustomValidity(
-        name.value.trim().length < 2
-          ? "Please enter your name (at least 2 characters)."
-          : "",
-      );
-      goals.setCustomValidity(
-        goals.value.trim().length < 10
-          ? "Please describe your project in at least 10 characters."
-          : "",
-      );
+      if (!existingOnly || name.validity.customError)
+        name.setCustomValidity(
+          name.value.trim().length < 2
+            ? localize(
+                "Please enter your name (at least 2 characters).",
+                "请输入姓名（至少 2 个字）。",
+              )
+            : "",
+        );
+      if (!existingOnly || goals.validity.customError)
+        goals.setCustomValidity(
+          goals.value.trim().length > 0 && goals.value.trim().length < 10
+            ? localize(
+                "Please add at least 10 characters of context, or leave this field blank.",
+                "请填写至少 10 个字的背景说明，或留空。",
+              )
+            : "",
+        );
+    };
+
+    const validateBrief = () => {
+      updateValidationMessages();
       return form.reportValidity();
     };
 
@@ -256,9 +350,7 @@ const contactEmail = site.email;
       event.preventDefault();
       if (!validateBrief()) return;
       const brief = getBrief();
-      setStatus(
-        `Your email draft is ready. Send it from your email app to complete your inquiry. If no email app opens, download your brief and send it to ${recipient}.`,
-      );
+      setStatus("email");
       window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(brief.subject)}&body=${encodeURIComponent(brief.body)}`;
     });
 
@@ -278,9 +370,7 @@ const contactEmail = site.email;
         link.click();
         link.remove();
         window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-        setStatus(
-          `Your brief is ready to download. Email the file to ${recipient} when you’re ready to discuss your project.`,
-        );
+        setStatus("download");
       });
 
     form.addEventListener("input", (event) => {
@@ -290,7 +380,13 @@ const contactEmail = site.email;
       ) {
         event.target.setCustomValidity("");
       }
+      statusKind = null;
       if (status) status.hidden = true;
+    });
+
+    window.addEventListener(LANGUAGE_CHANGE_EVENT, () => {
+      renderStatus();
+      updateValidationMessages(true);
     });
   }
 </script>
@@ -371,6 +467,9 @@ const contactEmail = site.email;
   }
   label > span:not(.optional) {
     color: #606bc7;
+  }
+  .project-dialog label > .field-label {
+    color: inherit;
   }
   .optional {
     margin-left: 5px;

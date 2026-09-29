@@ -1,4 +1,4 @@
-/* Fluid Fabs after dark. Keep photography and scientific image pixels intact. */
+/* Fluid Fabs after dark. */
 :root[data-theme="dark"] {
   color-scheme: dark;
   --ink: #edf3ff;
@@ -442,7 +442,7 @@
   color: #afbdd4;
 }
 
-:root[data-theme="dark"] .lab-section .lab-origin > span {
+:root[data-theme="dark"] .lab-section .lab-origin > .lab-origin-dot {
   background: #9fb8ff;
   box-shadow: 0 0 0 4px #273c63;
 }
@@ -654,7 +654,10 @@
   color: #dce6f9;
 }
 
-:root[data-theme="dark"] .project-dialog label > span:not(.optional) {
+:root[data-theme="dark"]
+  .project-dialog
+  label
+  > span:not(.optional):not(.field-label) {
   color: #c0b9ff;
 }
 

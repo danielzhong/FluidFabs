@@ -1,0 +1,38 @@
+<button
+  class="language-toggle"
+  type="button"
+  data-language-toggle
+  aria-label="Switch to Chinese"
+  title="Switch to Chinese"
+  lang="zh-CN"
+  hidden
+>
+  中文
+</button>
+
+<style>
+  .language-toggle {
+    display: grid;
+    place-items: center;
+    min-width: 46px;
+    height: 42px;
+    padding: 0 9px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 600;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+  }
+  .language-toggle:hover {
+    border-color: var(--blue);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .language-toggle {
+      transition: none;
+    }
+  }
+</style>

@@ -11,6 +11,7 @@ const { light = false } = Astro.props;
   href={withBase("/")}
   class:list={["brand", { "brand-light": light }]}
   aria-label={`${site.name} home`}
+  data-zh-aria-label={`${site.name} 首页`}
 >
   <svg
     width="34"

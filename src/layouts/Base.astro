@@ -5,28 +5,30 @@ import "../styles/main.css";
 import "../styles/dark.css";
 import "../styles/motion.css";
 import "../styles/interactions.css";
+import "../styles/language.css";
 import Header from "./partials/Header.astro";
 import Footer from "./partials/Footer.astro";
 import ProjectDialog from "./components/ProjectDialog.astro";
 import BackToTop from "./components/BackToTop.astro";
 import Motion from "./components/Motion.astro";
+import LanguageController from "./components/LanguageController.astro";
 import { site } from "../config/site";
 import { withBase } from "../lib/paths";
 interface Props {
   title?: string;
+  titleZh?: string;
   description?: string;
+  descriptionZh?: string;
 }
 const {
   title = `${site.name} — ${site.tagline}`,
+  titleZh = `${site.name} — ${site.taglineZh}`,
   description = site.description,
+  descriptionZh = site.descriptionZh,
 } = Astro.props;
 const canonicalURL = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).href
   : undefined;
-const shareImage = withBase("/images/fluidica-chip.png");
-const shareImageURL = Astro.site
-  ? new URL(shareImage, Astro.site).href
-  : shareImage;
 ---
 
 <!doctype html>
@@ -44,28 +46,35 @@ const shareImageURL = Astro.site
           theme = "light";
       } catch {}
       document.documentElement.dataset.theme = theme;
+      try {
+        document.documentElement.lang =
+          localStorage.getItem("fluid-fabs-language") === "zh" ? "zh-CN" : "en";
+      } catch {}
       document
         .querySelector('meta[name="theme-color"]')
         .setAttribute("content", theme === "dark" ? "#0b1220" : "#f8faff");
     </script>
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <title data-zh={titleZh}>{title}</title>
+    <meta
+      name="description"
+      content={description}
+      data-zh-content={descriptionZh}
+    />
     {canonicalURL && <link rel="canonical" href={canonicalURL} />}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    {canonicalURL && <meta property="og:url" content={canonicalURL} />}
-    <meta property="og:image" content={shareImageURL} />
+    <meta property="og:title" content={title} data-zh-content={titleZh} />
     <meta
-      property="og:image:alt"
-      content="A transparent microfluidic chip with blue and violet fluid channels"
+      property="og:description"
+      content={description}
+      data-zh-content={descriptionZh}
     />
-    <meta name="twitter:card" content="summary_large_image" />
+    {canonicalURL && <meta property="og:url" content={canonicalURL} />}
+    <meta name="twitter:card" content="summary" />
     <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
   </head>
   <body id="top" tabindex="-1">
-    <a class="skip-link" href="#main">
+    <a class="skip-link" href="#main" data-zh="跳至主要内容">
       Skip to content
     </a>
     <Header />
@@ -75,6 +84,7 @@ const shareImageURL = Astro.site
     <Footer />
     <ProjectDialog />
     <BackToTop />
+    <LanguageController />
     <Motion />
   </body>
 </html>

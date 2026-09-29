@@ -2,30 +2,40 @@
 import Logo from "../components/Logo.astro";
 import Icon from "../components/Icon.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
+import LanguageToggle from "../components/LanguageToggle.astro";
 import { withBase } from "../../lib/paths";
 const links = [
-  { label: "Technology", href: withBase("/#technology") },
-  { label: "How it works", href: withBase("/#process") },
-  { label: "Applications", href: withBase("/#applications") },
-  { label: "Our lab", href: withBase("/#lab") },
+  { label: "Platform", zh: "平台介绍", href: withBase("/#platform") },
+  { label: "Explorer", zh: "交互模型", href: withBase("/#explorer") },
+  { label: "Roadmap", zh: "开发路线", href: withBase("/#roadmap") },
+  { label: "Partners", zh: "合作交流", href: withBase("/#partners") },
 ];
 ---
 
 <header class="site-header">
   <div class="container header-inner">
     <Logo />
-    <nav class="desktop-nav" aria-label="Main navigation">
+    <nav
+      class="desktop-nav"
+      aria-label="Main navigation"
+      data-zh-aria-label="主导航"
+    >
       {links.map((link) => (
-        <a href={link.href}>{link.label}</a>
+        <a href={link.href} data-zh={link.zh}>
+          {link.label}
+        </a>
       ))}
     </nav>
     <div class="header-actions">
       <button
         class="button button-small button-dark header-cta"
         data-project-trigger
+        data-project-interest="Biotech pilot"
       >
-        Start a project <Icon name="diagonal" size={17} />
+        <span data-zh="申请合作试点">Explore a pilot</span>{" "}
+        <Icon name="diagonal" size={17} />
       </button>
+      <LanguageToggle />
       <ThemeToggle />
       <button
         class="menu-toggle"
@@ -38,12 +48,25 @@ const links = [
       </button>
     </div>
   </div>
-  <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" hidden>
+  <nav
+    class="mobile-nav"
+    id="mobile-nav"
+    aria-label="Mobile navigation"
+    data-zh-aria-label="移动端导航"
+    hidden
+  >
     {links.map((link) => (
-      <a href={link.href}>{link.label}</a>
+      <a href={link.href} data-zh={link.zh}>
+        {link.label}
+      </a>
     ))}
-    <button class="button button-primary" data-project-trigger>
-      Start a project <Icon name="arrow" size={18} />
+    <button
+      class="button button-primary"
+      data-project-trigger
+      data-project-interest="Biotech pilot"
+    >
+      <span data-zh="申请合作试点">Explore a pilot</span>{" "}
+      <Icon name="arrow" size={18} />
     </button>
   </nav>
 </header>
@@ -60,20 +83,25 @@ const links = [
   }
 </style>
 <script>
+  import { localize, LANGUAGE_CHANGE_EVENT } from "../../lib/i18n";
   const toggle = document.querySelector<HTMLButtonElement>(".menu-toggle");
   const navigation = document.querySelector<HTMLElement>("#mobile-nav");
+  const updateLabel = () =>
+    toggle?.setAttribute(
+      "aria-label",
+      toggle.getAttribute("aria-expanded") === "true"
+        ? localize("Close navigation", "关闭导航")
+        : localize("Open navigation", "打开导航"),
+    );
   const close = () => {
     toggle?.setAttribute("aria-expanded", "false");
-    toggle?.setAttribute("aria-label", "Open navigation");
+    updateLabel();
     if (navigation) navigation.hidden = true;
   };
   toggle?.addEventListener("click", () => {
     const open = toggle.getAttribute("aria-expanded") !== "true";
     toggle.setAttribute("aria-expanded", String(open));
-    toggle.setAttribute(
-      "aria-label",
-      open ? "Close navigation" : "Open navigation",
-    );
+    updateLabel();
     if (navigation) navigation.hidden = !open;
   });
   navigation?.querySelectorAll("a, button").forEach((link) =>
@@ -91,5 +119,7 @@ const links = [
       close();
     }
   });
-  window.matchMedia("(min-width: 900px)").addEventListener("change", close);
+  updateLabel();
+  window.addEventListener(LANGUAGE_CHANGE_EVENT, updateLabel);
+  window.matchMedia("(min-width: 1100px)").addEventListener("change", close);
 </script>

@@ -2,7 +2,7 @@
   "name": "fluid-fabs",
   "version": "1.0.0",
   "private": true,
-  "description": "Fluid Fabs — AI-designed microfluidics, manufactured on demand. Based on Automark Astro by Themefisher.",
+  "description": "Fluid Fabs \u2014 a concept platform for exploring drug-particle behavior across solution and channel conditions. Based on Automark Astro by Themefisher.",
   "type": "module",
   "engines": {
     "node": ">=22.12.0"

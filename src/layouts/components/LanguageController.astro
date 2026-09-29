@@ -1,0 +1,70 @@
+<script is:inline>
+  (() => {
+    const key = "fluid-fabs-language";
+    const root = document.documentElement;
+    // Translations are trusted, authored markup. Never place form input in data-zh.
+    // Capture English once; replacing only these display nodes preserves UI state.
+    const content = Array.from(document.querySelectorAll("[data-zh]"))
+      .filter((element) => !element.parentElement?.closest("[data-zh]"))
+      .map((element) => ({
+        element,
+        en: element.innerHTML,
+        zh: element.getAttribute("data-zh"),
+      }));
+    const attributes = [
+      "aria-label",
+      "alt",
+      "title",
+      "placeholder",
+      "content",
+    ].flatMap((attribute) =>
+      Array.from(document.querySelectorAll(`[data-zh-${attribute}]`)).map(
+        (element) => ({
+          element,
+          attribute,
+          en: element.getAttribute(attribute) || "",
+          zh: element.getAttribute(`data-zh-${attribute}`),
+        }),
+      ),
+    );
+    const buttons = document.querySelectorAll("[data-language-toggle]");
+    let activeLanguage;
+    const applyLanguage = (language) => {
+      if (activeLanguage === language) return;
+      root.lang = language === "zh" ? "zh-CN" : "en";
+      content.forEach(({ element, en, zh }) => {
+        const html = language === "zh" ? zh : en;
+        if (element.innerHTML !== html) element.innerHTML = html;
+      });
+      attributes.forEach(({ element, attribute, en, zh }) =>
+        element.setAttribute(attribute, language === "zh" ? zh : en),
+      );
+      buttons.forEach((button) => {
+        button.hidden = false;
+        button.textContent = language === "zh" ? "EN" : "中文";
+        button.lang = language === "zh" ? "en" : "zh-CN";
+        const label = language === "zh" ? "切换为英文" : "Switch to Chinese";
+        button.setAttribute("aria-label", label);
+        button.setAttribute("title", label);
+      });
+      activeLanguage = language;
+      window.dispatchEvent(
+        new CustomEvent("fluid-fabs:language-change", { detail: { language } }),
+      );
+    };
+    applyLanguage(root.lang === "zh-CN" ? "zh" : "en");
+    buttons.forEach((button) =>
+      button.addEventListener("click", () => {
+        const language = activeLanguage === "en" ? "zh" : "en";
+        applyLanguage(language);
+        try {
+          localStorage.setItem(key, language);
+        } catch {}
+      }),
+    );
+    window.addEventListener("storage", (event) => {
+      if (event.key === key || event.key === null)
+        applyLanguage(event.newValue === "zh" ? "zh" : "en");
+    });
+  })();
+</script>

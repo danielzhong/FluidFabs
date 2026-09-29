@@ -1,0 +1,333 @@
+.literature-evidence {
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: #fff;
+  margin-bottom: 30px;
+}
+.lit-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+.lit-topline > span:last-child {
+  font-size: 11px;
+  color: var(--muted);
+}
+.lit-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 35px;
+  margin-block: 28px;
+}
+.lit-heading h3 {
+  font-size: 29px;
+  margin-bottom: 12px;
+}
+.lit-heading p {
+  font-size: 12px;
+  max-width: 650px;
+}
+.lit-heading .text-button {
+  flex-shrink: 0;
+  font-size: 11px;
+  padding-block: 8px;
+}
+.lit-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  max-width: 760px;
+}
+.lit-filters label {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 11px;
+  font-weight: 550;
+}
+.lit-filters select {
+  background: var(--paper);
+  border: 1px solid #bfcadd;
+  border-radius: 6px;
+  padding: 10px 12px;
+  min-height: 44px;
+  font-size: 12px;
+  width: 100%;
+  color: var(--ink);
+}
+.lit-filter-note {
+  font-size: 11px;
+  margin-block: 15px 22px;
+  max-width: 840px;
+}
+.lit-measurement,
+.lit-chart-axis {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr) 130px;
+  align-items: center;
+  gap: 25px;
+}
+.lit-measurement {
+  min-height: 52px;
+  border-bottom: 1px solid var(--line);
+}
+.lit-medium {
+  font-size: 12px;
+}
+.lit-measurement svg,
+.lit-chart-axis svg {
+  width: 100%;
+}
+.lit-measurement strong {
+  font-size: 14px;
+  font-weight: 550;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.lit-measurement strong span {
+  font-size: 10px;
+  color: var(--muted);
+}
+.lit-track {
+  stroke: var(--line);
+}
+.lit-zero {
+  stroke: var(--muted);
+  stroke-dasharray: 2 4;
+  opacity: 0.5;
+}
+.lit-spread {
+  stroke: var(--blue);
+  stroke-width: 2;
+}
+.lit-point {
+  fill: var(--blue);
+}
+.lit-chart-axis text {
+  font-size: 10px;
+  fill: var(--muted);
+}
+.lit-chart-axis > span {
+  font-size: 10px;
+  color: var(--muted);
+  text-align: right;
+}
+.lit-empty {
+  font-size: 12px;
+  padding: 26px 0;
+}
+.lit-context {
+  margin-block: 20px;
+  padding: 16px 20px;
+  background: #f2f5fc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: 10px;
+}
+.lit-formulation {
+  color: var(--ink);
+}
+.lit-context p {
+  font-size: 10px;
+  margin-top: 4px;
+}
+.lit-context a {
+  color: var(--blue);
+  flex-shrink: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.lit-records {
+  border-top: 1px solid var(--line);
+}
+.lit-records summary {
+  cursor: pointer;
+  display: flex;
+  list-style: none;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 0 0;
+  font-size: 12px;
+  font-weight: 550;
+}
+.lit-records summary::-webkit-details-marker {
+  display: none;
+}
+.lit-records[open] summary > span:last-child {
+  rotate: 45deg;
+}
+.lit-record-body {
+  padding-top: 20px;
+}
+.lit-record-body > p {
+  font-size: 11px;
+}
+.lit-table-scroll {
+  overflow-x: auto;
+  margin-block: 20px;
+}
+.lit-table-scroll table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 850px;
+  text-align: left;
+  font-size: 11px;
+}
+.lit-table-scroll caption {
+  text-align: left;
+  font-size: 11px;
+  margin-bottom: 15px;
+  color: var(--muted);
+}
+.lit-table-scroll th,
+.lit-table-scroll td {
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.lit-table-scroll th {
+  font-weight: 550;
+}
+.lit-table-scroll td {
+  color: var(--muted);
+}
+.lit-table-scroll thead {
+  background: #f2f5fc;
+}
+.lit-number {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.lit-number small {
+  display: block;
+  font-size: 9px;
+}
+.lit-table-scroll a,
+.lit-source-title,
+.lit-sources a,
+.lit-provenance a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.lit-sources {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-block: 25px;
+}
+.lit-sources article {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 22px;
+  font-size: 10px;
+}
+.lit-sources h4 {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 550;
+}
+.lit-sources p {
+  margin-block: 12px;
+  line-height: 1.8;
+}
+.lit-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+:root[data-theme="dark"] .literature-evidence {
+  background: #101a2c;
+}
+:root[data-theme="dark"] :is(.lit-context, .lit-table-scroll thead) {
+  background: #152238;
+}
+:root[data-theme="dark"] .lit-filters select {
+  background: #142139;
+  border-color: #3e516c;
+}
+@media (max-width: 899px) {
+  .literature-evidence {
+    padding: 24px;
+  }
+  .lit-heading {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .lit-measurement,
+  .lit-chart-axis {
+    grid-template-columns: 175px minmax(0, 1fr) 105px;
+    gap: 12px;
+  }
+  .lit-context {
+    align-items: start;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .lit-sources {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .literature-evidence {
+    padding: 20px 17px;
+  }
+  .lit-topline {
+    align-items: start;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .lit-heading h3 {
+    font-size: 24px;
+  }
+  .lit-filters {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  .lit-measurement {
+    grid-template-columns: minmax(0, 1fr) 100px;
+    gap: 0;
+    padding-block: 12px 8px;
+  }
+  .lit-measurement .lit-medium {
+    grid-column: 1;
+    grid-row: 1;
+    padding-right: 5px;
+    font-size: 11px;
+  }
+  .lit-measurement strong {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 12px;
+  }
+  .lit-measurement svg {
+    grid-column: 1 / -1;
+    height: 28px;
+  }
+  .lit-chart-axis {
+    display: block;
+  }
+  .lit-chart-axis > span {
+    display: none;
+  }
+  .lit-context {
+    padding: 15px;
+  }
+  .lit-formulation {
+    overflow-wrap: anywhere;
+  }
+  .lit-sources article {
+    padding: 18px;
+  }
+  .lit-sources a {
+    overflow-wrap: anywhere;
+  }
+}

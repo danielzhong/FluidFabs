@@ -4,16 +4,27 @@ import { withBase } from "../lib/paths";
 import { site } from "../config/site";
 ---
 
-<Base title={`Page not found — ${site.name}`}>
+<Base
+  title={`Page not found — ${site.name}`}
+  titleZh={`未找到页面 — ${site.name}`}
+>
   <section class="container not-found">
-    <span class="eyebrow">404 / A SMALL DETOUR</span>
-    <h1>
+    <span class="eyebrow" data-zh="404 / 暂时偏离了流道">
+      404 / A SMALL DETOUR
+    </span>
+    <h1 data-zh="让我们回到<br />探索的方向。">
       Let’s get back
       <br />
       into the flow.
     </h1>
-    <p>We couldn’t find this page. Your next idea is still waiting.</p>
-    <a class="button button-primary" href={withBase("/")}>
+    <p data-zh="没有找到这个页面，但你的下一个想法仍值得探索。">
+      We couldn’t find this page. Your next idea is still waiting.
+    </p>
+    <a
+      class="button button-primary"
+      href={withBase("/")}
+      data-zh={`返回 ${site.name} →`}
+    >
       Back to {site.name} →
     </a>
   </section>

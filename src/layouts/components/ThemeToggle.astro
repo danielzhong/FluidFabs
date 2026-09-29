@@ -36,6 +36,7 @@
 </button>
 
 <script>
+  import { localize, LANGUAGE_CHANGE_EVENT } from "../../lib/i18n";
   const themeKey = "fluid-fabs-theme";
   const themeButton = document.querySelector<HTMLButtonElement>(
     "[data-theme-toggle]",
@@ -43,7 +44,9 @@
   const applyTheme = (theme: "dark" | "light") => {
     document.documentElement.dataset.theme = theme;
     const label =
-      theme === "dark" ? "Switch to light mode" : "Switch to dark mode";
+      theme === "dark"
+        ? localize("Switch to light mode", "切换为浅色模式")
+        : localize("Switch to dark mode", "切换为深色模式");
     themeButton?.setAttribute("aria-label", label);
     themeButton?.setAttribute("title", label);
     document
@@ -67,6 +70,11 @@
     if (event.key === themeKey || event.key === null)
       applyTheme(event.newValue === "light" ? "light" : "dark");
   });
+  window.addEventListener(LANGUAGE_CHANGE_EVENT, () =>
+    applyTheme(
+      document.documentElement.dataset.theme === "light" ? "light" : "dark",
+    ),
+  );
 </script>
 
 <style>

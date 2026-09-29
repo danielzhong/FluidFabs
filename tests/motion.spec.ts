@@ -4,7 +4,7 @@ test("scroll entrances settle, do not replay, and the reading indicator follows 
   page,
 }) => {
   await page.goto("./");
-  const card = page.locator(".value-card").first();
+  const card = page.locator(".platform-card").first();
   await card.scrollIntoViewIfNeeded();
   await expect(card).toHaveCSS("opacity", "1");
   await expect
@@ -57,7 +57,7 @@ test("reduced motion keeps all content visible and cancels effects when the pref
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("./");
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(page.locator(".hero-image-frame")).toHaveCSS(
+  await expect(page.locator(".platform-card").first()).toHaveCSS(
     "transform",
     "none",
   );
@@ -74,8 +74,8 @@ test("reduced motion keeps all content visible and cancels effects when the pref
       ),
     )
     .toBe(0);
-  await page.locator(".value-card").last().scrollIntoViewIfNeeded();
-  await expect(page.locator(".value-card").last()).toHaveCSS("opacity", "1");
+  await page.locator(".platform-card").last().scrollIntoViewIfNeeded();
+  await expect(page.locator(".platform-card").last()).toHaveCSS("opacity", "1");
   await page.reload();
   await expect(page.locator("h1")).toHaveCSS("opacity", "1");
   await expect(page.locator(".hero-halo")).toHaveCSS("animation-name", "none");
@@ -88,7 +88,7 @@ test("reduced motion keeps all content visible and cancels effects when the pref
   );
 });
 
-test("page content and photo links stay available without JavaScript", async ({
+test("the concept, default charts, and model assumptions remain readable without JavaScript", async ({
   browser,
   baseURL,
 }) => {
@@ -99,12 +99,11 @@ test("page content and photo links stay available without JavaScript", async ({
   const page = await context.newPage();
   await page.goto(baseURL!);
   await expect(page.locator("h1")).toBeVisible();
-  const photo = page.locator("[data-lab-photo]").first();
-  await photo.scrollIntoViewIfNeeded();
-  await expect(photo).toBeVisible();
-  await expect(photo.locator("img")).toHaveJSProperty("complete", true);
-  const imageURL = await photo.getAttribute("href");
-  await photo.click();
-  expect(new URL(page.url()).pathname).toBe(imageURL);
+  await expect(page.locator("#explorer")).toBeVisible();
+  await expect(page.locator("#explorer svg").first()).toBeVisible();
+  await expect(page.locator("#roadmap")).toContainText(
+    "Concept & demonstration",
+  );
+  await expect(page.locator("img")).toHaveCount(0);
   await context.close();
 });

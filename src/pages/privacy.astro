@@ -4,47 +4,57 @@ import { site } from "../config/site";
 import { withBase } from "../lib/paths";
 ---
 
-<Base title={`Privacy — ${site.name}`}>
+<Base title={`Privacy — ${site.name}`} titleZh={`隐私说明 — ${site.name}`}>
   <article class="container legal-page">
-    <a class="text-button" href={withBase("/")}>
+    <a class="text-button" href={withBase("/")} data-zh={`← 返回 ${site.name}`}>
       ← Back to {site.name}
     </a>
-    <span class="eyebrow">YOUR INFORMATION</span>
-    <h1>Privacy, in plain language.</h1>
-    <p>
+    <span class="eyebrow" data-zh="关于你的信息">
+      YOUR INFORMATION
+    </span>
+    <h1 data-zh="关于隐私，说清楚。">Privacy, in plain language.</h1>
+    <p
+      data-zh={`本页说明当你浏览 ${site.name} 网站或准备项目咨询时，我们如何处理相关信息。`}
+    >
       This page explains how the {site.name} website handles information when
       you explore the site or prepare a project inquiry.
     </p>
-    <h2>Project inquiries</h2>
-    <p>
+    <h2 data-zh="项目咨询">Project inquiries</h2>
+    <p
+      data-zh={`项目表单会在你自己的邮件应用中准备一封草稿。只有在你选择发送邮件后，${site.name} 才会收到这些信息。你也可以将项目需求下载为文本文件，保存在自己的设备上。本网站不会保存表单内容。`}
+    >
       The project form prepares an email draft in your own email application.
       Your details are sent to {site.name} only if you choose to send that
       email. You can also download your project brief as a text file on your
       device. Form entries are not stored by this website.
     </p>
-    <h2>What you choose to share</h2>
-    <p>
+    <h2 data-zh="你选择分享的信息">What you choose to share</h2>
+    <p data-zh="如果你联系我们，我们会收到你提供的姓名、邮箱、机构名称及项目信息，并使用这些信息回复和讨论你的项目。分享保密研究资料或敏感个人信息前，请先与我们沟通。">
       If you contact us, we receive the name, email address, organization, and
       project information that you include. We use this information to respond
       and discuss your project. Please contact us before sharing confidential
       research or sensitive personal information.
     </p>
-    <h2>Display preferences</h2>
-    <p>
-      When you switch between light and dark themes, your preference is stored
-      locally on your device so the website can remember it on your next visit.
+    <h2 data-zh="显示偏好">Display preferences</h2>
+    <p data-zh="当你切换语言或深浅色主题时，偏好会保存在设备的浏览器中，以便下次访问时沿用。">
+      When you switch languages or change between light and dark themes, your
+      preferences are stored locally on your device so the website can remember
+      them on your next visit.
     </p>
-    <h2>Cookies and analytics</h2>
-    <p>
+    <h2 data-zh="Cookie 与访问统计">Cookies and analytics</h2>
+    <p data-zh="本网站不使用广告 Cookie、访问分析追踪器或第三方在线字体。为提供和保护网站服务，托管服务商可能处理 IP 地址、访问日志等常规技术请求信息。">
       This website does not use advertising cookies, analytics trackers, or
       third-party web fonts. A hosting provider may process standard technical
       request information, such as IP addresses and access logs, to deliver and
       secure the website.
     </p>
-    <h2>Questions or deletion requests</h2>
+    <h2 data-zh="疑问或删除请求">Questions or deletion requests</h2>
     <p>
-      To ask about information you have shared with us or request its deletion,
-      email <a href={`mailto:${site.email}`}>{site.email}</a>.
+      <span data-zh="如需询问你向我们提供的信息或申请删除，请发送邮件至：">
+        To ask about information you have shared with us or request its
+        deletion, email
+      </span>{" "}
+      <a href={`mailto:${site.email}`}>{site.email}</a>.
     </p>
   </article>
 </Base>

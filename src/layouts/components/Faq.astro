@@ -6,19 +6,26 @@ import Icon from "./Icon.astro";
 <section class="section faq-section" id="faq">
   <div class="container faq-layout">
     <div class="faq-intro">
-      <span class="eyebrow">A LITTLE MORE CLARITY</span>
-      <h2>
-        Good questions.
+      <span class="eyebrow" data-zh="关于模型与开发路线">
+        THE MODEL AND THE ROAD AHEAD
+      </span>
+      <h2 data-zh="理解模型。<br />明确下一步。">
+        Know the model.
         <br />
-        Clear answers.
+        See what’s next.
       </h2>
-      <p>
-        Have something more specific in mind?
+      <p data-zh="有值得一起探索的研究问题？<br />聊聊合作试点的可能。">
+        Have a research question to explore?
         <br />
-        Let’s talk about your project.
+        Let’s discuss a potential pilot.
       </p>
-      <button class="text-button" data-project-trigger>
-        Get in touch <Icon name="arrow" size={19} />
+      <button
+        class="text-button"
+        data-project-trigger
+        data-project-interest="Biotech pilot"
+      >
+        <span data-zh="讨论合作试点">Discuss a pilot</span>{" "}
+        <Icon name="arrow" size={19} />
       </button>
     </div>
     <div class="faq-list">
@@ -26,10 +33,10 @@ import Icon from "./Icon.astro";
         <details class="faq-item" name="faq">
           <summary>
             <span class="faq-number">0{index + 1}</span>
-            <span>{faq.question}</span>
+            <span data-zh={faq.zh.question}>{faq.question}</span>
             <Icon name="plus" size={19} />
           </summary>
-          <p>{faq.answer}</p>
+          <p data-zh={faq.zh.answer}>{faq.answer}</p>
         </details>
       ))}
     </div>

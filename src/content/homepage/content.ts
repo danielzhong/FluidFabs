@@ -1,131 +1,146 @@
 export const benefits = [
   {
-    icon: "spark",
-    tag: "INTELLIGENCE IN THE DESIGN",
-    title: "Less friction. More discovery.",
-    text: "Turn your experimental requirements into purposeful channel designs. AI-assisted exploration, guided by your scientific intent.",
-    detail: "AI-assisted design exploration",
-    visual: "design",
-  },
-  {
-    icon: "layers",
-    tag: "AFFORDABLE BY DESIGN",
-    title: "Custom doesn’t have to mean costly.",
-    text: "3D printing makes it possible: custom chips at prices at least 50% lower than regular off-the-shelf options, with geometries and connections shaped around your experiment.",
-    detail: "Lower chip prices, made possible by 3D printing",
-    visual: "layers",
-  },
-  {
     icon: "sliders",
-    tag: "FLEXIBILITY IN EVERY ITERATION",
-    title: "Built for your next “what if.”",
-    text: "Start with the chip your research needs today. Test in your setup, learn from the results, and refine the next version.",
-    detail: "On-demand, project-based fabrication",
-    visual: "iteration",
+    tag: "ORGANIZE BY ZETA POTENTIAL",
+    title: "Start with a clearer comparison.",
+    text: "Group published particle observations by zeta potential range. Keep the source, measurement conditions, and reported uncertainty in view when comparing media.",
+    detail: "Published measurements with source context",
+    visual: "charge",
+    zh: {
+      tag: "按 Zeta 电位分组",
+      title: "让比较有据可循。",
+      text: "按 Zeta 电位范围组织文献中的颗粒观测，在比较介质时保留来源、测量条件和原文报告的不确定性。",
+      detail: "带有来源背景的文献实测值",
+    },
+  },
+  {
+    icon: "mix",
+    tag: "COMPARE THE ENVIRONMENT",
+    title: "Change the conditions. Explore the response.",
+    text: "Compare measurements across solution media, then explore diffusion scenarios using a reported particle size, assumed viscosity, and a reference length. Each step keeps evidence separate from calculation.",
+    detail: "Measured inputs. Explicit model assumptions.",
+    visual: "environment",
+    zh: {
+      tag: "比较不同环境",
+      title: "改变条件，探索响应。",
+      text: "先比较不同介质中的实测值，再使用文献粒径、假设黏度和参考长度探索扩散情景，清楚区分证据与计算。",
+      detail: "实测输入，明确的模型假设",
+    },
+  },
+  {
+    icon: "scan",
+    tag: "MAKE BEHAVIOR VISIBLE",
+    title: "See the pattern. Plan the experiment.",
+    text: "Bring concentration profiles and diffusion times into a shared visual workspace. Illustrative models help teams discuss assumptions and plan what to measure next.",
+    detail: "Visual context for experimental planning",
+    visual: "profiles",
+    zh: {
+      tag: "让颗粒行为可视化",
+      title: "看清变化，规划实验。",
+      text: "在同一个可视化界面中呈现浓度分布和扩散时间。示意模型帮助团队讨论假设，并规划下一步需要测量什么。",
+      detail: "为实验规划提供直观参考",
+    },
   },
 ];
+
 export const steps = [
   {
     number: "01",
     icon: "sliders",
-    title: "Bring the question.",
-    text: "Tell us about your application, fluids, and constraints. A sketch, CAD file, or simply an idea is a great place to start.",
-    note: "Your idea → a project brief",
+    title: "Characterize the system.",
+    text: "Review published particle properties, zeta potential measurements, and their experimental conditions. Identify which observations fit the research question and which measurements are still needed.",
+    note: "Research question → measurement plan",
+    zh: {
+      title: "测量与表征。",
+      text: "查阅已发表的颗粒性质、Zeta 电位测量及实验条件，判断哪些观测与研究问题相关，以及仍需开展哪些测量。",
+      note: "研究问题 → 测量计划",
+    },
   },
   {
     number: "02",
-    icon: "spark",
-    title: "Shape the flow.",
-    text: "We explore an AI-assisted design with you, review the geometry, and agree on materials and a fabrication approach.",
-    note: "Your requirements → a custom design",
-  },
-  {
-    number: "03",
-    icon: "chip",
-    title: "Make it real.",
-    text: "Your design becomes a 3D-printed chip. Put it to work in your experiment, then bring what you learn into the next iteration.",
-    note: "Your design → a chip in your hands",
-  },
-];
-export const applications = [
-  {
-    id: "mixing",
-    number: "01",
     icon: "mix",
-    title: "Mixing & reactions",
-    short: "Put fluid interactions in focus.",
-    text: "Explore channel geometries that bring fluids together. Design around your mixing goals, residence times, and experimental setup.",
-    tags: ["Micromixers", "Reaction pathways", "Gradient generation"],
-    diagram: "mixing",
-    label: "SERPENTINE MIXER",
-    caption: "Two streams. A new direction.",
+    title: "Model the scenarios.",
+    text: "Use selected literature sizes to explore idealized concentration changes and diffusion times. Record assumed viscosity, temperature, and reference length without treating them as reported measurement conditions.",
+    note: "Defined conditions → comparable scenarios",
+    zh: {
+      title: "构建情景模型。",
+      text: "选用文献粒径，探索理想化浓度变化与扩散时间。记录假设黏度、温度和参考长度，并将这些假设与原文测量条件区分开。",
+      note: "明确条件 → 可比较的情景",
+    },
   },
   {
-    id: "droplets",
-    number: "02",
-    icon: "drop",
-    title: "Droplet microfluidics",
-    short: "Explore possibilities, drop by drop.",
-    text: "Investigate custom flow-focusing and junction geometries for droplet generation and fluid partitioning, shaped around your research requirements.",
-    tags: ["Flow focusing", "Fluid partitioning", "Emulsion research"],
-    diagram: "droplets",
-    label: "FLOW-FOCUSING JUNCTION",
-    caption: "Small volumes. Space to explore.",
-  },
-  {
-    id: "bioassays",
     number: "03",
-    icon: "cells",
-    title: "Cell & bioassay research",
-    short: "Build around your biology.",
-    text: "Discuss fluid handling for cells, samples, and reagents. Together, we review your material compatibility, chamber, and connection requirements.",
-    tags: ["Sample handling", "Research chambers", "Reagent delivery"],
-    diagram: "cells",
-    label: "RESEARCH CHAMBER",
-    caption: "Your experiment sets the geometry.",
-  },
-  {
-    id: "analysis",
-    number: "04",
     icon: "scan",
-    title: "Sensing & analysis",
-    short: "Connect the parts of your workflow.",
-    text: "Explore custom fluid paths for sample preparation, sensing, and integration with your laboratory equipment. Start with the interfaces your setup needs.",
-    tags: ["Sample preparation", "Sensor interfaces", "Lab integration"],
-    diagram: "analysis",
-    label: "INTEGRATED FLUID PATH",
-    caption: "Make room for the next insight.",
+    title: "Calibrate through experiments.",
+    text: "The next development step is to compare model outputs with experimental measurements, refine parameters, and evaluate where the model applies before extending its use.",
+    note: "Experimental evidence → model refinement",
+    zh: {
+      title: "通过实验校准。",
+      text: "下一阶段将把模型输出与实验测量对照，修正参数，并在拓展用途之前评估模型的适用范围。",
+      note: "实验证据 → 模型优化",
+    },
   },
 ];
+
 export const faqs = [
   {
-    question: "Do I need a finished CAD design to get started?",
+    question: "What is Fluid Fabs building?",
     answer:
-      "No. Start with a sketch, an existing design, or a description of your experiment. Share what you need the chip to do, and we’ll work through the design requirements with you.",
+      "We are developing a particle-modeling platform for biotech R&D, connecting published measurements with transparent modeling scenarios. The current literature preview contains research liposomes and magnetic particles; it is not a catalog of approved drugs. The wider goal is to help teams frame and test questions about particle transport.",
+    zh: {
+      question: "Fluid Fabs 正在开发什么？",
+      answer:
+        "我们正在开发面向生物科技研发的颗粒建模平台，将已发表的测量数据与假设明确的建模情景连接起来。当前文献预览包含研究用脂质体和磁性颗粒，并非获批药物目录。更长远的目标是帮助团队提出并检验颗粒传输问题。",
+    },
   },
   {
-    question: "What can I customize?",
+    question: "Does the explorer show experimental results?",
     answer:
-      "Channel layouts, chip geometry, connection points, and form factor are all part of the conversation. We review the feasibility of your requirements for the proposed material and printing process before fabrication.",
+      "The literature preview shows zeta potential and particle-size measurements published by other researchers. The concentration curves and diffusion times are separate illustrative calculations using selected literature sizes and assumed viscosity, temperature, and reference length. Fluid Fabs has not experimentally validated these curves, and they do not establish clinical performance.",
+    zh: {
+      question: "交互模型展示的是实验结果吗？",
+      answer:
+        "文献预览展示其他研究者发表的 Zeta 电位和粒径实测值。浓度曲线与扩散时间则是独立的示意计算，使用选定文献粒径以及假设黏度、温度和参考长度。Fluid Fabs 尚未通过实验验证这些曲线，它们也不代表临床表现。",
+    },
   },
   {
-    question: "What materials and channel sizes are available?",
+    question: "Is zeta potential enough to describe particle behavior?",
     answer:
-      "Material options and achievable feature sizes depend on the design and fabrication approach. Tell us about your fluids, target dimensions, and operating conditions so we can assess a suitable option for your project.",
+      "Zeta potential is an organizing dimension for comparing particle systems. Particle properties, solution conditions, and the assumptions of each model also matter. A zeta potential range alone does not establish how a drug particle will behave in an experiment or in the body.",
+    zh: {
+      question: "仅凭 Zeta 电位就能描述颗粒行为吗？",
+      answer:
+        "Zeta 电位是组织和比较颗粒体系的一个维度，颗粒性质、溶液条件以及模型假设同样重要。仅凭一个电位范围，无法确定药物颗粒在实验或人体中的实际行为。",
+    },
   },
   {
-    question: "How does AI fit into the design process?",
+    question: "What could a research pilot involve?",
     answer:
-      "AI assists with exploring design possibilities from your requirements. Designs are reviewed with you before fabrication. AI-generated geometry does not replace testing, material compatibility checks, or validation in your experimental setup.",
+      "A pilot discussion starts with your research question, available measurements, and the conditions you want to compare. Together, we can scope a modeling question and an experimental evaluation plan. We are inviting biotech teams interested in helping shape this early-stage platform.",
+    zh: {
+      question: "研究试点可以如何开展？",
+      answer:
+        "试点讨论从你的研究问题、已有测量数据和希望比较的条件开始。我们可以一起明确建模问题及实验评估计划，欢迎有兴趣共同完善这一早期平台的生物科技团队交流。",
+    },
   },
   {
-    question: "How much does a chip cost, and how long will it take?",
+    question: "How will the models be evaluated?",
     answer:
-      "Our 3D-printed chips cost at least 50% less than regular off-the-shelf alternatives. Each project is quoted individually based on design complexity, materials, and quantity. We agree on the scope, price, and expected schedule with you before proceeding.",
+      "The planned path is to compare model outputs with experimental measurements, document discrepancies, and refine model parameters. Evaluating performance across relevant conditions and documenting limits will be necessary before drawing stronger conclusions from the models.",
+    zh: {
+      question: "将如何评估模型？",
+      answer:
+        "计划中的路径是将模型输出与实验测量对照，记录差异并优化参数。在依据模型作出更强的结论之前，需要评估其在相关条件下的表现，并明确局限性。",
+    },
   },
   {
-    question: "Can I iterate on a design after testing it?",
+    question: "How does this connect to future clinical research?",
     answer:
-      "Yes. Share what you learn from testing, and we can discuss changes to the geometry or fabrication approach for the next version. Each iteration is reviewed and scoped with you.",
+      "Our near-term focus is research modeling and experimental validation. Future clinical research is a separate, longer-term direction that would require further evidence, specialist collaboration, and study-specific review. The current demonstration does not establish clinical suitability or support treatment decisions.",
+    zh: {
+      question: "这与未来临床研究有什么联系？",
+      answer:
+        "近期重点是科研建模与实验验证。未来临床研究是独立的长期方向，需要进一步的证据、专业合作和针对具体研究的评审。当前演示不代表已具备临床适用性，也不用于治疗决策。",
+    },
   },
 ];

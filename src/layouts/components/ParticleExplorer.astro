@@ -1,0 +1,724 @@
+---
+import {
+  classifyZeta,
+  diffusionCoefficient,
+  transverseDiffusionTime,
+  gaussianConcentration,
+  profilePoints,
+  centerlinePoints,
+} from "../../lib/particleModel";
+
+import {
+  PARTICLE_OBSERVATIONS,
+  LITERATURE_SOURCES,
+} from "../../content/literature/particles";
+
+const initialObservation = PARTICLE_OBSERVATIONS.find(
+  (item) => item.id === "fl-pbs",
+)!;
+const initialSource =
+  LITERATURE_SOURCES[
+    initialObservation.sourceId as keyof typeof LITERATURE_SOURCES
+  ];
+const initial = {
+  observation: initialObservation.id,
+  diameter: initialObservation.diameterNm,
+  viscosity: 1,
+  width: 200,
+  time: 300,
+};
+const initialD = diffusionCoefficient(initial.diameter, initial.viscosity);
+const initialTau = transverseDiffusionTime(initial.width / 2, initialD);
+const initialCenter = gaussianConcentration(0, initial.time, initialD);
+const xSpatial = (x: number) => 50 + ((x + 200) / 400) * 570;
+const ySpatial = (c: number) => 200 - c * 180;
+const xTime = (t: number) => 50 + (t / 1200) * 570;
+const yTime = (c: number) => 175 - c * 155;
+const toPath = (points: { x: number; y: number }[]) =>
+  points
+    .map((p, i) => `${i ? "L" : "M"}${p.x.toFixed(2)},${p.y.toFixed(2)}`)
+    .join(" ");
+const spatialPath = toPath(
+  profilePoints(400, initial.time, initialD).map((p) => ({
+    x: xSpatial(p.x),
+    y: ySpatial(p.concentration),
+  })),
+);
+const baselinePath = toPath(
+  profilePoints(400, 0, initialD).map((p) => ({
+    x: xSpatial(p.x),
+    y: ySpatial(p.concentration),
+  })),
+);
+const temporalPath = toPath(
+  centerlinePoints(1200, initialD).map((p) => ({
+    x: xTime(p.time),
+    y: yTime(p.concentration),
+  })),
+);
+---
+
+<div
+  class="particle-explorer"
+  id="particle-explorer"
+  data-group={classifyZeta(initialObservation.zetaMv)}
+>
+  <div class="pe-toolbar">
+    <div class="pe-demo-badge">
+      <span aria-hidden="true"></span>
+      <span data-zh="文献输入 · 示意计算">
+        Literature input · Illustrative calculation
+      </span>
+    </div>
+    <span class="pe-temperature">
+      <span data-zh="假设温度">Assumed T</span> = 298.15 K (25 °C)
+    </span>
+  </div>
+  <div class="pe-workspace">
+    <form
+      class="pe-controls"
+      aria-label="Illustrative diffusion inputs"
+      data-zh-aria-label="扩散示意模型输入"
+    >
+      <fieldset disabled data-pe-controls>
+        <legend data-zh="从文献测量值开始">
+          Start from a published measurement
+        </legend>
+        <p
+          class="pe-control-intro"
+          data-zh="颗粒数据来自论文；下方黏度、温度与扩散条件为模型假设。"
+        >
+          Particle data come from papers; viscosity, temperature, and diffusion
+          conditions below are model assumptions.
+        </p>
+        <div class="pe-control-grid">
+          <div class="pe-field pe-field-observation">
+            <label for="pe-observation" data-zh="已发表的颗粒 / 介质">
+              Published particle / medium
+            </label>
+            <select id="pe-observation" aria-describedby="pe-zeta-note">
+              {PARTICLE_OBSERVATIONS.map((item) => (
+                <option
+                  value={item.id}
+                  selected={item.id === initial.observation}
+                >
+                  {item.particleLabel} · {item.medium}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div class="pe-field pe-field-diameter">
+            <label for="pe-diameter" data-zh="已报告水动力直径">
+              Reported hydrodynamic diameter
+            </label>
+            <output
+              id="pe-diameter"
+              for="pe-observation"
+              class="pe-reported-size"
+            >
+              {initialObservation.diameterNm} ±{" "}
+              {initialObservation.diameterSpreadNm} nm
+            </output>
+            <small data-pe-diameter-basis>
+              {initialObservation.diameterBasis}
+            </small>
+          </div>
+          <div class="pe-field">
+            <label for="pe-viscosity" data-zh="模型黏度假设">
+              Model viscosity assumption
+            </label>
+            <select id="pe-viscosity">
+              <option value="0.7">0.7 mPa·s</option>
+              <option value="1" selected>
+                1.0 mPa·s
+              </option>
+              <option value="2">2.0 mPa·s</option>
+            </select>
+          </div>
+          <div class="pe-field">
+            <div class="pe-range-label">
+              <label for="pe-width" data-zh="参考通道宽度">
+                Reference channel width
+              </label>
+              <output id="pe-width-value" for="pe-width">
+                200 µm
+              </output>
+            </div>
+            <input
+              id="pe-width"
+              type="range"
+              min="100"
+              max="400"
+              step="10"
+              value="200"
+              aria-describedby="pe-width-note"
+            />
+            <div class="pe-range-extents" aria-hidden="true">
+              <span>100 µm</span>
+              <span>400 µm</span>
+            </div>
+          </div>
+          <div class="pe-field">
+            <div class="pe-range-label">
+              <label for="pe-time" data-zh="经过时间">
+                Elapsed time
+              </label>
+              <output id="pe-time-value" for="pe-time">
+                300 s
+              </output>
+            </div>
+            <input
+              id="pe-time"
+              type="range"
+              min="0"
+              max="1200"
+              step="10"
+              value="300"
+            />
+            <div class="pe-range-extents" aria-hidden="true">
+              <span>0 s</span>
+              <span>1,200 s</span>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="pe-reset" data-pe-reset>
+          <span aria-hidden="true">↺</span>
+          <span data-zh="恢复默认设置">Reset inputs</span>
+        </button>
+      </fieldset>
+      <p
+        class="pe-input-note"
+        id="pe-zeta-note"
+        data-zh="文献粒径与假设黏度决定本示例曲线。已测 ζ 电位不是此扩散公式的输入；改变介质会选取另一条已发表记录，不代表模型预测了介质效应。"
+      >
+        Reported size and assumed viscosity drive these curves. Measured ζ is
+        not an input to this diffusion equation. Selecting a medium chooses
+        another published record; it does not predict a medium effect.
+      </p>
+      <noscript>
+        <p class="pe-input-note">
+          JavaScript is off. The plots use the published FL / PBS diameter of
+          567 nm with assumed 1.0 mPa·s viscosity, 298.15 K temperature, 200 µm
+          reference width, and 300 s elapsed time.
+        </p>
+      </noscript>
+    </form>
+
+    <div class="pe-results">
+      <div class="pe-observation-card">
+        <div class="pe-result-heading">
+          <span class="pe-kicker" data-zh="已发表测量记录">
+            PUBLISHED MEASUREMENT
+          </span>
+          <a
+            data-pe-source
+            href={initialSource.tableUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {initialSource.authors} ({initialSource.year}) ·{" "}
+            {initialSource.tableLabel}
+          </a>
+        </div>
+        <h3 data-pe-particle>{initialObservation.particleLabel}</h3>
+        <p class="pe-medium" data-pe-medium>
+          {initialObservation.medium}
+        </p>
+        <dl class="pe-published-values">
+          <div>
+            <dt data-zh="水动力直径">Hydrodynamic diameter</dt>
+            <dd data-pe-size>
+              {initialObservation.diameterNm} ±{" "}
+              {initialObservation.diameterSpreadNm} nm
+            </dd>
+          </div>
+          <div>
+            <dt data-zh="ζ 电位">ζ potential</dt>
+            <dd data-pe-zeta>
+              {initialObservation.zetaMv} ± {initialObservation.zetaSpreadMv} mV
+            </dd>
+          </div>
+        </dl>
+        <p class="pe-uncertainty" data-pe-uncertainty>
+          {initialObservation.diameterBasis} ·{" "}
+          {initialObservation.uncertaintyLabel}
+        </p>
+        <p class="pe-observation-note" data-pe-observation-note>
+          {initialObservation.note}
+        </p>
+      </div>
+      <p
+        class="pe-output-heading pe-kicker"
+        data-zh="示意模型输出 · 非实测浓度"
+      >
+        ILLUSTRATIVE MODEL OUTPUT · NOT MEASURED CONCENTRATION
+      </p>
+      <dl class="pe-metrics">
+        <div>
+          <dt data-zh="扩散系数 D">Diffusion coefficient D</dt>
+          <dd>
+            <span data-pe-d>{initialD.toFixed(2)}</span>
+            <span> µm²/s</span>
+            <small>Stokes–Einstein</small>
+          </dd>
+        </div>
+        <div>
+          <dt data-zh="特征横向扩散时间 τ">Transverse diffusion time τ</dt>
+          <dd>
+            <span data-pe-tau>{(initialTau / 60).toFixed(1)}</span>
+            <span data-zh=" 分钟"> min</span>
+            <small data-pe-length>L = W / 2 = 100 µm</small>
+          </dd>
+        </div>
+        <div>
+          <dt data-zh="当前中心浓度比值">Current centerline ratio</dt>
+          <dd>
+            <span data-pe-center>{initialCenter.toFixed(3)}</span>
+            <small>C(0, t) / C(0, 0)</small>
+          </dd>
+        </div>
+      </dl>
+
+      <div class="pe-plot-card">
+        <div class="pe-plot-heading">
+          <div>
+            <span class="pe-plot-number">01</span>
+            <h3 data-zh="浓度如何沿横向展开">Concentration across space</h3>
+          </div>
+          <span class="pe-chart-tag" data-pe-time-tag>
+            t = 300 s
+          </span>
+        </div>
+        <div class="pe-plot-meta">
+          <span>C(x, t) / C(0, 0)</span>
+          <div class="pe-legend">
+            <span>
+              <i class="pe-key pe-key-current"></i>
+              <span data-zh="当前">Current</span>
+            </span>
+            <span>
+              <i class="pe-key pe-key-initial"></i>
+              <span data-zh="初始">Initial</span>
+            </span>
+          </div>
+        </div>
+        <svg
+          class="pe-chart-svg"
+          viewBox="0 0 640 240"
+          role="img"
+          aria-labelledby="pe-spatial-title"
+          aria-describedby="pe-spatial-description"
+        >
+          <title
+            id="pe-spatial-title"
+            data-zh="归一化浓度随横向位置变化"
+          >Normalized concentration across transverse position</title>
+          <desc id="pe-spatial-description">
+            An initially narrow Gaussian spreads with time. The current
+            centerline ratio is {initialCenter.toFixed(3)}. Dashed vertical
+            guides mark a 200 micrometer reference width, not wall boundaries.
+          </desc>
+          <rect
+            data-pe-span
+            x={xSpatial(-100)}
+            y="20"
+            width={xSpatial(100) - xSpatial(-100)}
+            height="180"
+            class="pe-channel-span"
+          />
+          {[0, 0.5, 1].map((c) => (
+            <g>
+              <line
+                x1="50"
+                x2="620"
+                y1={ySpatial(c)}
+                y2={ySpatial(c)}
+                class="pe-gridline"
+              />
+              <text x="39" y={ySpatial(c) + 5} text-anchor="end">
+                {c.toFixed(1)}
+              </text>
+            </g>
+          ))}
+          {[-200, -100, 0, 100, 200].map((x) => (
+            <g>
+              <line
+                x1={xSpatial(x)}
+                x2={xSpatial(x)}
+                y1="20"
+                y2="200"
+                class="pe-gridline pe-gridline-vertical"
+              />
+              <text x={xSpatial(x)} y="225" text-anchor="middle">
+                {x}
+              </text>
+            </g>
+          ))}
+          <line
+            data-pe-left-guide
+            x1={xSpatial(-100)}
+            x2={xSpatial(-100)}
+            y1="20"
+            y2="200"
+            class="pe-reference-guide"
+          />
+          <line
+            data-pe-right-guide
+            x1={xSpatial(100)}
+            x2={xSpatial(100)}
+            y1="20"
+            y2="200"
+            class="pe-reference-guide"
+          />
+          <path data-pe-initial d={baselinePath} class="pe-initial-path" />
+          <path
+            data-pe-area
+            d={`${spatialPath} L620,200 L50,200 Z`}
+            class="pe-profile-area"
+          />
+          <path data-pe-profile d={spatialPath} class="pe-profile-path" />
+        </svg>
+        <p class="pe-axis-label" data-zh="横向位置 x（µm）">
+          Transverse position x (µm)
+        </p>
+        <p
+          class="pe-chart-note"
+          id="pe-width-note"
+          data-zh="竖虚线仅表示 ±W/2 的长度参考；模型不求解通道壁面边界。"
+        >
+          Vertical guides show ±W/2 for length comparison only; no wall boundary
+          conditions are solved.
+        </p>
+      </div>
+
+      <div class="pe-plot-card pe-temporal-card">
+        <div class="pe-plot-heading">
+          <div>
+            <span class="pe-plot-number">02</span>
+            <h3 data-zh="中心浓度如何随时间变化">
+              Centerline concentration over time
+            </h3>
+          </div>
+          <span class="pe-chart-tag">x = 0 µm</span>
+        </div>
+        <div class="pe-plot-meta">
+          <span>C(0, t) / C(0, 0)</span>
+          <span data-zh="固定归一化基准">Fixed normalization</span>
+        </div>
+        <svg
+          class="pe-chart-svg pe-time-svg"
+          viewBox="0 0 640 215"
+          role="img"
+          aria-labelledby="pe-temporal-title"
+          aria-describedby="pe-temporal-description"
+        >
+          <title
+            id="pe-temporal-title"
+            data-zh="中心浓度随时间变化"
+          >Centerline concentration versus time</title>
+          <desc id="pe-temporal-description">
+            The centerline value decreases from 1 as a unit-mass Gaussian
+            spreads. The marker shows the selected time of 300 seconds.
+          </desc>
+          {[0, 0.5, 1].map((c) => (
+            <g>
+              <line
+                x1="50"
+                x2="620"
+                y1={yTime(c)}
+                y2={yTime(c)}
+                class="pe-gridline"
+              />
+              <text x="39" y={yTime(c) + 5} text-anchor="end">
+                {c.toFixed(1)}
+              </text>
+            </g>
+          ))}
+          {[0, 300, 600, 900, 1200].map((t) => (
+            <text x={xTime(t)} y="202" text-anchor="middle">
+              {t}
+            </text>
+          ))}
+          <path data-pe-temporal d={temporalPath} class="pe-profile-path" />
+          <line
+            data-pe-time-guide
+            x1={xTime(initial.time)}
+            x2={xTime(initial.time)}
+            y1="20"
+            y2="175"
+            class="pe-reference-guide"
+          />
+          <circle
+            data-pe-time-marker
+            cx={xTime(initial.time)}
+            cy={yTime(initialCenter)}
+            r="5"
+            class="pe-time-marker"
+          />
+        </svg>
+        <p class="pe-axis-label" data-zh="时间 t（s）">
+          Time t (s)
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <details class="pe-methods">
+    <summary>
+      <span data-zh="模型、归一化与适用范围">
+        Model, normalization &amp; scope
+      </span>
+      <span aria-hidden="true">+</span>
+    </summary>
+    <div class="pe-method-body">
+      <p data-zh="颗粒 ζ 电位与粒径取自所链接的已发表论文；这些是研究制备物，不代表已获批药品。计算仅将已报告的平均水动力粒径作为等效球体直径，在假设黏度与 298.15 K 恒温下使用 Stokes–Einstein 关系。ζ 不直接进入扩散公式。">
+        Particle ζ and size are taken from the linked published papers. These
+        are research preparations, not a claim of approved drug status. The
+        calculation uses the reported mean hydrodynamic size as an
+        equivalent-sphere diameter, applying Stokes–Einstein at an assumed
+        viscosity and constant 298.15 K. ζ does not directly enter the diffusion
+        equation.
+      </p>
+      <p data-zh="已报告的误差按原文含义展示，未向模型传播。DLS 峰位均值与 Z 均值并不等同，尤其不应将多分散或聚集样品视为单一粒径颗粒群。此示例不重现论文实验，也不以文献数据训练或验证预测模型。">
+        Published spreads are displayed with their source definitions and are
+        not propagated through the calculation. DLS mean peak and Z-average are
+        different size summaries; polydisperse or aggregated samples should not
+        be treated as a monodisperse population. This illustration neither
+        recreates the paper experiments nor trains or validates a predictive
+        model on them.
+      </p>
+      <div class="pe-equations">
+        <code>
+          D = k<sub>B</sub>T / (3πηd<sub>H</sub>)
+        </code>
+        <code>σ²(t) = σ₀² + 2Dt</code>
+        <code>τ = (W/2)² / (2D)</code>
+      </div>
+      <p data-zh="初始条件为单位质量的一维高斯分布，σ₀ = 12 µm。纵轴始终除以固定的初始中心峰值 C(0,0)：C(x,t)/C(0,0) = [σ₀/σ(t)]·exp[−x²/(2σ²(t))]。不会按每个时刻的峰值重新归一化，数值也不代表 mg/mL。">
+        The initial condition is a unit-mass, one-dimensional Gaussian with σ₀ =
+        12 µm. Both plots divide by the fixed initial centerline peak C(0,0):
+        C(x,t)/C(0,0) = [σ₀/σ(t)]·exp[−x²/(2σ²(t))]. Values are not rescaled to
+        each timepoint’s peak and do not represent mg/mL.
+      </p>
+      <p data-zh="这是无限域内的自由扩散，不是完整 CFD。通道宽度只提供长度参照；τ 使用半宽 L=W/2，不代表达到完全混合所需时间。模型忽略流动、壁面边界及吸附、聚集、反应和电场漂移，不用于血流、药代动力学或临床预测。">
+        This is free diffusion on an infinite domain, not full CFD. Channel
+        width provides a comparison length only; τ uses the half-width L=W/2 and
+        is not a time to complete mixing. Flow, wall boundaries and adsorption,
+        aggregation, reactions, and electric-field drift are omitted. It does
+        not model blood flow, pharmacokinetics, or clinical outcomes.
+      </p>
+      <div class="pe-source-links">
+        <span data-zh="公式参考：">Formula references:</span>
+        <a
+          href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.1200-6.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-zh="NIST 粒径测量协议（PDF）"
+        >
+          NIST particle-sizing protocol (PDF)
+        </a>
+        <a
+          href="https://www.nist.gov/si-redefinition/kelvin/kelvin-boltzmann-constant"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-zh="NIST 玻尔兹曼常数"
+        >
+          NIST Boltzmann constant
+        </a>
+      </div>
+    </div>
+  </details>
+  <p
+    class="pe-sr-only"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+    data-pe-announcement
+  ></p>
+</div>
+
+<script>
+  import { localize, getLanguage, LANGUAGE_CHANGE_EVENT } from "../../lib/i18n";
+  import {
+    classifyZeta,
+    diffusionCoefficient,
+    transverseDiffusionTime,
+    gaussianConcentration,
+    profilePoints,
+    centerlinePoints,
+  } from "../../lib/particleModel";
+
+  import {
+    PARTICLE_OBSERVATIONS,
+    LITERATURE_SOURCES,
+  } from "../../content/literature/particles";
+
+  const explorer = document.querySelector<HTMLElement>("#particle-explorer");
+  if (explorer) {
+    const fieldset =
+      explorer.querySelector<HTMLFieldSetElement>("[data-pe-controls]")!;
+    const observation =
+      explorer.querySelector<HTMLSelectElement>("#pe-observation")!;
+    const viscosity =
+      explorer.querySelector<HTMLSelectElement>("#pe-viscosity")!;
+    const width = explorer.querySelector<HTMLInputElement>("#pe-width")!;
+    const time = explorer.querySelector<HTMLInputElement>("#pe-time")!;
+    const setText = (selector: string, text: string) => {
+      const element = explorer.querySelector(selector);
+      if (element) element.textContent = text;
+    };
+    const setAttribute = (
+      selector: string,
+      name: string,
+      value: string | number,
+    ) => explorer.querySelector(selector)?.setAttribute(name, String(value));
+    const toPath = (points: { x: number; y: number }[]) =>
+      points
+        .map(
+          (point, index) =>
+            `${index ? "L" : "M"}${point.x.toFixed(2)},${point.y.toFixed(2)}`,
+        )
+        .join(" ");
+    const xSpatial = (x: number) => 50 + ((x + 200) / 400) * 570;
+    const xTime = (t: number) => 50 + (t / 1200) * 570;
+
+    const render = (announce = false) => {
+      const particle = PARTICLE_OBSERVATIONS.find(
+        (item) => item.id === observation.value,
+      )!;
+      const source =
+        LITERATURE_SOURCES[
+          particle.sourceId as keyof typeof LITERATURE_SOURCES
+        ];
+      const D = diffusionCoefficient(
+        particle.diameterNm,
+        Number(viscosity.value),
+      );
+      const W = Number(width.value);
+      const t = Number(time.value);
+      const tau = transverseDiffusionTime(W / 2, D);
+      const center = gaussianConcentration(0, t, D);
+      const format = (value: number, decimals = 1) =>
+        new Intl.NumberFormat(getLanguage() === "zh" ? "zh-CN" : "en-US", {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals,
+        }).format(value);
+      explorer.dataset.group = classifyZeta(particle.zetaMv);
+      setText(
+        "[data-pe-particle]",
+        localize(particle.particleLabel, particle.particleLabelZh),
+      );
+      setText("[data-pe-medium]", localize(particle.medium, particle.mediumZh));
+      const reportedSize = `${particle.diameterNm} ± ${particle.diameterSpreadNm} nm`;
+      setText("#pe-diameter", reportedSize);
+      setText("[data-pe-size]", reportedSize);
+      setText(
+        "[data-pe-zeta]",
+        `${particle.zetaMv} ± ${particle.zetaSpreadMv} mV`,
+      );
+      setText(
+        "[data-pe-diameter-basis]",
+        localize(particle.diameterBasis, particle.diameterBasisZh),
+      );
+      setText(
+        "[data-pe-uncertainty]",
+        `${localize(particle.diameterBasis, particle.diameterBasisZh)} · ${localize(particle.uncertaintyLabel, particle.uncertaintyLabelZh)}`,
+      );
+      setText(
+        "[data-pe-observation-note]",
+        localize(particle.note, particle.noteZh),
+      );
+      setText(
+        "[data-pe-source]",
+        `${source.authors} (${source.year}) · ${localize(source.tableLabel, source.tableLabel.replace("Table ", "表 "))}`,
+      );
+      setAttribute("[data-pe-source]", "href", source.tableUrl);
+      for (const option of observation.options) {
+        const item = PARTICLE_OBSERVATIONS.find(
+          (record) => record.id === option.value,
+        )!;
+        const label = `${localize(item.particleLabel, item.particleLabelZh)} · ${localize(item.medium, item.mediumZh)}`;
+        if (option.textContent !== label) option.textContent = label;
+      }
+      setText("[data-pe-d]", format(D, 2));
+      setText("[data-pe-tau]", format(tau / 60));
+      setText("[data-pe-center]", format(center, 3));
+      setText("[data-pe-length]", `L = W / 2 = ${W / 2} µm`);
+      setText("#pe-width-value", `${W} µm`);
+      setText("#pe-time-value", `${t} s`);
+      setText("[data-pe-time-tag]", `t = ${t} s`);
+      width.setAttribute(
+        "aria-valuetext",
+        localize(`${W} micrometers`, `${W} 微米`),
+      );
+      time.setAttribute("aria-valuetext", localize(`${t} seconds`, `${t} 秒`));
+
+      // The displayed x-domain stays fixed. W only moves comparison guides and τ.
+      const spatial = toPath(
+        profilePoints(400, t, D).map((p) => ({
+          x: xSpatial(p.x),
+          y: 200 - p.concentration * 180,
+        })),
+      );
+      const temporal = toPath(
+        centerlinePoints(1200, D).map((p) => ({
+          x: xTime(p.time),
+          y: 175 - p.concentration * 155,
+        })),
+      );
+      setAttribute("[data-pe-profile]", "d", spatial);
+      setAttribute("[data-pe-area]", "d", `${spatial} L620,200 L50,200 Z`);
+      setAttribute("[data-pe-temporal]", "d", temporal);
+      setAttribute("[data-pe-span]", "x", xSpatial(-W / 2));
+      setAttribute(
+        "[data-pe-span]",
+        "width",
+        xSpatial(W / 2) - xSpatial(-W / 2),
+      );
+      for (const [selector, x] of [
+        ["[data-pe-left-guide]", xSpatial(-W / 2)],
+        ["[data-pe-right-guide]", xSpatial(W / 2)],
+        ["[data-pe-time-guide]", xTime(t)],
+      ] as const) {
+        setAttribute(selector, "x1", x);
+        setAttribute(selector, "x2", x);
+      }
+      setAttribute("[data-pe-time-marker]", "cx", xTime(t));
+      setAttribute("[data-pe-time-marker]", "cy", 175 - center * 155);
+      setText(
+        "#pe-spatial-description",
+        localize(
+          `At ${t} seconds, the centerline ratio is ${format(center, 3)}. Vertical guides mark a ${W} micrometer reference span; they are not walls.`,
+          `${t} 秒时，中心浓度比值为 ${format(center, 3)}。竖虚线表示 ${W} 微米的参考宽度，不是壁面边界。`,
+        ),
+      );
+      setText(
+        "#pe-temporal-description",
+        localize(
+          `Centerline concentration decreases from 1 as the Gaussian spreads. The selected time is ${t} seconds, with a ratio of ${format(center, 3)}.`,
+          `高斯分布扩散时，中心浓度比值从 1 开始下降。当前时间为 ${t} 秒，比值为 ${format(center, 3)}。`,
+        ),
+      );
+      if (announce)
+        setText(
+          "[data-pe-announcement]",
+          localize(
+            `Calculation updated. D ${format(D, 2)} square micrometers per second; characteristic diffusion time ${format(tau / 60)} minutes; centerline ratio ${format(center, 3)} at ${t} seconds.`,
+            `计算已更新。扩散系数 ${format(D, 2)} 平方微米每秒，特征扩散时间 ${format(tau / 60)} 分钟，${t} 秒时中心浓度比值为 ${format(center, 3)}。`,
+          ),
+        );
+    };
+    fieldset.addEventListener("input", () => render());
+    fieldset.addEventListener("change", () => render(true));
+    explorer.querySelector("[data-pe-reset]")?.addEventListener("click", () => {
+      observation.value = "fl-pbs";
+      viscosity.value = "1";
+      width.value = "200";
+      time.value = "300";
+      render(true);
+    });
+    window.addEventListener(LANGUAGE_CHANGE_EVENT, () => render(true));
+    render();
+    fieldset.disabled = false;
+  }
+</script>
