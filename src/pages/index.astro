@@ -2,54 +2,81 @@
 import Base from "../layouts/Base.astro";
 import Badge from "../layouts/components/Badge.astro";
 import Icon from "../layouts/components/Icon.astro";
-import ProcessCard from "../layouts/components/ProcessCard.astro";
-import Faq from "../layouts/components/Faq.astro";
 import FlowField from "../layouts/components/FlowField.astro";
-import ParticleExplorer from "../layouts/components/ParticleExplorer.astro";
-import LiteratureEvidence from "../layouts/components/LiteratureEvidence.astro";
-import Experiments from "../layouts/components/Experiments.astro";
-import "../styles/literature.css";
+import { withBase } from "../lib/paths";
 import "../styles/platform.css";
-import "../styles/explorer.css";
-import { benefits, steps } from "../content/homepage/content";
-const roadmap = [
+import "../styles/pages.css";
+
+const pages = [
   {
-    stage: "01 / NOW",
-    stageZh: "01 / 当前",
-    title: "Explore the concept.",
-    titleZh: "探索模型概念。",
-    text: "Build a shared framework for particle properties, environmental conditions, and interpretable visualizations. This website pairs published particle measurements with an illustrative diffusion calculation.",
+    path: "/explorer/",
+    slug: "explorer",
+    icon: "sliders",
+    title: "Explore the model",
+    titleZh: "探索交互模型",
+    text: "Start with published particle measurements. Change the conditions and explore illustrative concentration profiles and diffusion times.",
     textZh:
-      "建立颗粒属性、环境条件与可解释可视化的共同框架。本网站将文献颗粒实测值与示意扩散计算并列呈现。",
-    status: "Concept & demonstration",
-    statusZh: "概念与交互演示",
-    current: true,
+      "从文献中的颗粒实测值出发，调整条件，探索浓度分布与扩散时间的示意计算。",
+    label: "Open the explorer",
+    labelZh: "打开交互模型",
+    featured: true,
   },
   {
-    stage: "02 / NEXT",
-    stageZh: "02 / 下一步",
-    title: "Put it to the test.",
-    titleZh: "走向实验验证。",
-    text: "Work with research partners to define measurements, compare model outputs with bench data, and refine assumptions within a clearly defined use case.",
-    textZh:
-      "与研究伙伴共同定义测量方案，用实验数据检验模型输出，并在明确的应用场景中逐步校准假设。",
-    status: "Planned experimental validation",
-    statusZh: "规划中的实验验证",
-    current: false,
+    path: "/platform/",
+    slug: "platform",
+    icon: "layers",
+    title: "Meet the platform",
+    titleZh: "了解平台理念",
+    text: "See how particle properties, environments, and time connect in our modeling concept.",
+    textZh: "了解我们的建模概念如何将颗粒属性、环境条件与时间联系起来。",
+    label: "Discover the platform",
+    labelZh: "了解平台",
+    featured: false,
   },
   {
-    stage: "03 / LONGER TERM",
-    stageZh: "03 / 长期方向",
-    title: "Build toward translation.",
-    titleZh: "探索转化研究。",
-    text: "Investigate applications in drug-development workflows. Any future clinical use would require purpose-specific validation, relevant evidence, and appropriate review.",
-    textZh:
-      "探索在药物研发流程中的应用。未来如进入临床场景，需要针对具体用途完成验证、积累相关证据并经过适当审查。",
-    status: "Future research direction",
-    statusZh: "未来研究方向",
-    current: false,
+    path: "/experiments/",
+    slug: "experiments",
+    icon: "scan",
+    title: "From model to experiment",
+    titleZh: "从模型走向实验",
+    text: "Explore planned studies connecting particle characterization, concentration observations, and model outputs.",
+    textZh: "探索规划中的实验研究，连接颗粒表征、浓度观察与模型输出。",
+    label: "Explore the experiments",
+    labelZh: "查看实验规划",
+    featured: false,
+  },
+  {
+    path: "/roadmap/",
+    slug: "roadmap",
+    icon: "mix",
+    title: "See what comes next",
+    titleZh: "了解下一步方向",
+    text: "Follow the path from this concept to planned experimental validation and future research.",
+    textZh: "了解从当前概念到实验验证，以及未来研究方向的开发路线。",
+    label: "View the roadmap",
+    labelZh: "查看开发路线",
+    featured: false,
+  },
+  {
+    path: "/partners/",
+    slug: "partners",
+    icon: "cells",
+    title: "Build with us",
+    titleZh: "一起推进研究",
+    text: "Discuss a biotech pilot, request an investor walkthrough, or express interest in product updates.",
+    textZh: "讨论 biotech 合作试点、预约投资人演示，或表达对产品进展的关注。",
+    label: "Find your starting point",
+    labelZh: "了解合作方式",
+    featured: false,
   },
 ];
+// Keep previously shared section links useful after the move to separate pages.
+const legacyRoutes = Object.fromEntries([
+  ...pages.map(({ slug, path }) => [`#${slug}`, withBase(path)]),
+  ["#faq", withBase("/faq/")],
+  ["#workflow", withBase("/platform/#workflow")],
+  ["#literature", withBase("/explorer/#literature")],
+]);
 ---
 
 <Base>
@@ -83,7 +110,7 @@ const roadmap = [
           <span data-zh="申请合作试点">Explore a pilot</span>
           <Icon name="arrow" size={19} />
         </button>
-        <a class="button button-outline" href="#explorer">
+        <a class="button button-outline" href={withBase("/explorer/")}>
           <span data-zh="体验概念演示">Explore the concept</span>
           <Icon name="sliders" size={18} />
         </a>
@@ -121,298 +148,52 @@ const roadmap = [
     </div>
   </div>
 
-  <section
-    class="section explorer-section"
-    id="explorer"
-    aria-labelledby="explorer-heading"
-  >
+  <section class="section home-pages" aria-labelledby="discover-heading">
     <div class="container">
       <div class="section-heading">
         <div>
-          <span class="eyebrow" data-zh="交互式概念演示">
-            AN INTERACTIVE FIRST LOOK
+          <span class="eyebrow" data-zh="探索 FLUID FABS">
+            EXPLORE FLUID FABS
           </span>
-          <h2
-            id="explorer-heading"
-            data-zh="改变条件。<br /><span>观察情景如何变化。</span>"
+          <h2 id="discover-heading" data-zh="从这里开始。">
+            Choose where to begin.
+          </h2>
+        </div>
+        <p data-zh="从交互演示到未来的实验，每一个方向都有独立空间，方便你深入了解。">
+          From an interactive concept to future experiments, find the part of
+          Fluid Fabs you want to explore.
+        </p>
+      </div>
+      <div class="page-grid">
+        {pages.map((page, index) => (
+          <a
+            href={withBase(page.path)}
+            class:list={["page-card", { "page-card-featured": page.featured }]}
+            aria-labelledby={`page-card-${page.slug}-title`}
           >
-            Change the conditions.
-            <br />
-            <span>See the scenario.</span>
-          </h2>
-        </div>
-        <p data-zh="先查看可追溯的文献实测值，再调整明确标注的模型参数。把已知证据与待检验的计算放在同一个界面。">
-          Start with traceable published measurements, then adjust clearly
-          labeled model assumptions. See the evidence and explore a calculation
-          in one place.
-        </p>
-      </div>
-      <LiteratureEvidence />
-      <div class="calculation-intro">
-        <span class="eyebrow" data-zh="接下来，探索一个计算情景">
-          NEXT, EXPLORE A CALCULATED SCENARIO
-        </span>
-        <h3 data-zh="从报告粒径到示意扩散曲线。">
-          From reported size to illustrative diffusion.
-        </h3>
-        <p data-zh="以下曲线由公式计算，不是论文中的实测浓度或扩散时间。选择一条文献记录，并独立设置计算假设。">
-          These curves are calculated, not concentration or diffusion-time
-          measurements from the papers. Select a published record and set the
-          model assumptions independently.
-        </p>
-      </div>
-      <ParticleExplorer />
-    </div>
-  </section>
-
-  <section class="section platform-section" id="platform">
-    <div class="container">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow" data-zh="我们正在构建什么">
-            THE PLATFORM WE’RE BUILDING
-          </span>
-          <h2 data-zh="颗粒、环境与时间。<br /><span>在同一个视角下理解。</span>">
-            Particles. Environments. Time.
-            <br />
-            <span>One connected view.</span>
-          </h2>
-        </div>
-        <p data-zh="帮助研发团队提出更清晰的实验问题，也让合作伙伴看懂模型假设、证据缺口与下一阶段的研发目标。">
-          Help research teams frame better experiments, and give partners a
-          clear view of assumptions, evidence gaps, and the next development
-          milestones.
-        </p>
-      </div>
-      <div class="platform-grid">
-        {benefits.map((benefit, index) => (
-          <article class="platform-card">
-            <div class="platform-card-top">
-              <Icon name={benefit.icon} size={26} />
+            <div class="page-card-top" aria-hidden="true">
+              <Icon name={page.icon} size={27} />
               <span>0{index + 1}</span>
             </div>
-            <span class="micro-label" data-zh={benefit.zh.tag}>
-              {benefit.tag}
-            </span>
-            <h3 data-zh={benefit.zh.title}>{benefit.title}</h3>
-            <p data-zh={benefit.zh.text}>{benefit.text}</p>
-            <div class="platform-card-detail">
-              <span class="detail-dot"></span>
-              <span data-zh={benefit.zh.detail}>{benefit.detail}</span>
+            <h3 id={`page-card-${page.slug}-title`} data-zh={page.titleZh}>
+              {page.title}
+            </h3>
+            <p data-zh={page.textZh}>{page.text}</p>
+            <div class="page-card-action">
+              <span data-zh={page.labelZh}>{page.label}</span>
+              <Icon name="arrow" size={19} />
             </div>
-          </article>
-        ))}
-      </div>
-      <div class="platform-context">
-        <Icon name="sliders" size={22} />
-        <p data-zh="ζ 电位提供分组视角，而不是独立的扩散预测。我们希望结合粒径、测量介质和实验条件，逐步建立有数据依据的模型。">
-          Zeta potential offers a way to organize particles, not a standalone
-          diffusion prediction. Our direction is to bring particle size,
-          measurement medium, and experimental conditions into a model grounded
-          in data.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section process-section" id="workflow">
-    <div class="container">
-      <div class="center-heading">
-        <span class="eyebrow" data-zh="从研究问题开始">
-          START WITH A RESEARCH QUESTION
-        </span>
-        <h2 data-zh="表征。探索。检验。<br /><span>让建模与实验共同推进。</span>">
-          Characterize. Explore. Test.
-          <br />
-          <span>Connect models with experiments.</span>
-        </h2>
-        <p data-zh="我们设想的协作流程，从理解输入到检验输出。">
-          Our proposed collaboration workflow, from understanding inputs to
-          testing outputs.
-        </p>
-      </div>
-      <div class="process-grid">
-        {steps.map((step) => (
-          <ProcessCard {...step} />
-        ))}
-      </div>
-      <div class="process-bottom">
-        <span>
-          <Icon name="check" size={17} />
-          <span data-zh="先定义问题，再共同确定试点范围。">
-            Define the question first. Shape the pilot together.
-          </span>
-        </span>
-        <button
-          class="text-button"
-          data-project-trigger
-          data-project-interest="Biotech pilot"
-        >
-          <span data-zh="讨论一个研究场景">Discuss a research scenario</span>
-          <Icon name="arrow" size={20} />
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <Experiments />
-
-  <section class="section roadmap-section" id="roadmap">
-    <div class="container">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow" data-zh="以证据推进研发">
-            A ROADMAP BUILT AROUND EVIDENCE
-          </span>
-          <h2 data-zh="从可视化开始。<br /><span>向验证迈进。</span>">
-            Start with visibility.
-            <br />
-            <span>Build toward validation.</span>
-          </h2>
-        </div>
-        <p data-zh="我们希望实验和未来转化研究能从这个方向中受益。每一步，都需要与所要支持的决策相匹配的证据。">
-          We want experiments and future translational research to benefit from
-          this approach. Each step needs evidence appropriate to the decisions
-          it is meant to support.
-        </p>
-      </div>
-      <div class="roadmap-grid">
-        {roadmap.map((item) => (
-          <article
-            class:list={["roadmap-card", { "roadmap-current": item.current }]}
-          >
-            <span class="roadmap-stage" data-zh={item.stageZh}>
-              {item.stage}
-            </span>
-            <h3 data-zh={item.titleZh}>{item.title}</h3>
-            <p data-zh={item.textZh}>{item.text}</p>
-            <span class="roadmap-status" data-zh={item.statusZh}>
-              {item.status}
-            </span>
-          </article>
+          </a>
         ))}
       </div>
     </div>
   </section>
-
-  <section class="section partners-section" id="partners">
-    <div class="container">
-      <div class="center-heading">
-        <span class="eyebrow" data-zh="一起定义下一步">
-          HELP SHAPE WHAT COMES NEXT
-        </span>
-        <h2 data-zh="为开展实验的人。<br /><span>也为支持探索的人。</span>">
-          For the people doing the research.
-          <br />
-          <span>And the people backing it.</span>
-        </h2>
-      </div>
-      <div class="partner-grid">
-        <article class="partner-card">
-          <span class="micro-label" data-zh="BIOTECH 与科研团队">
-            BIOTECH & RESEARCH TEAMS
-          </span>
-          <h3 data-zh="把你的研究问题带来。">
-            Bring a question worth testing.
-          </h3>
-          <p data-zh="一起讨论配方、介质或传输场景，定义输入数据和实验终点，探索一个可执行的模型试点。">
-            Discuss a formulation, medium, or transport scenario. Define the
-            inputs and experimental endpoints for a focused modeling pilot.
-          </p>
-          <button
-            class="text-button"
-            data-project-trigger
-            data-project-interest="Biotech pilot"
-          >
-            <span data-zh="申请合作试点">Explore a pilot</span>
-            <Icon name="arrow" size={19} />
-          </button>
-        </article>
-        <article class="partner-card">
-          <span class="micro-label" data-zh="投资方与战略伙伴">
-            INVESTORS & STRATEGIC PARTNERS
-          </span>
-          <h3 data-zh="看懂机会，也看懂下一步。">
-            Explore the opportunity in context.
-          </h3>
-          <p data-zh="通过概念演示了解研发方向，讨论技术假设、验证里程碑，以及从研究工具走向潜在应用的路径。">
-            Walk through the concept, research assumptions, and validation
-            milestones. Discuss the path from a research tool to potential
-            applications.
-          </p>
-          <button
-            class="text-button"
-            data-project-trigger
-            data-project-interest="Investor walkthrough"
-          >
-            <span data-zh="预约投资方演示">
-              Request an investor walkthrough
-            </span>
-            <Icon name="arrow" size={19} />
-          </button>
-        </article>
-      </div>
-      <div class="updates-card">
-        <div>
-          <span class="micro-label" data-zh="保持关注">
-            STAY IN THE LOOP
-          </span>
-          <h3 data-zh="跟随模型的下一步进展。">Follow the next chapter.</h3>
-          <p data-zh="留下联系方式，表达你对产品进展和未来试点开放的兴趣。">
-            Express your interest in product updates and future pilot
-            opportunities.
-          </p>
-        </div>
-        <button
-          class="button button-outline"
-          data-project-trigger
-          data-project-interest="Product updates"
-        >
-          <span data-zh="申请接收产品更新">Request product updates</span>
-          <Icon name="arrow" size={18} />
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <Faq />
-  <section class="cta-section">
-    <div class="container">
-      <div class="cta-card model-cta">
-        <div class="cta-orbits" aria-hidden="true">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <div class="cta-copy">
-          <span class="eyebrow" data-zh="让研究问题，成为共同的下一步">
-            TURN A QUESTION INTO A SHARED NEXT STEP
-          </span>
-          <h2 data-zh="你希望<br /><span>看清什么？</span>">
-            What would you
-            <br />
-            <span>like to understand?</span>
-          </h2>
-          <p data-zh="带上你的研究问题、合作想法，或对这一方向的好奇。<br />一起讨论下一步。">
-            Bring your research question, partnership idea, or curiosity about
-            the direction.
-            <br />
-            Let’s explore the next step together.
-          </p>
-          <button
-            class="button button-white"
-            data-project-trigger
-            data-project-interest="Research partnership"
-          >
-            <span data-zh="开启交流">Start a conversation</span>
-            <Icon name="arrow" size={20} />
-          </button>
-        </div>
-        <div class="cta-equation" aria-hidden="true">
-          <span>ζ · D · t</span>
-          <p data-zh="属性 → 情景 → 证据">PROPERTIES → SCENARIOS → EVIDENCE</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <script is:inline define:vars={{ legacyRoutes }}>
+    const openLegacyPage = () => {
+      const destination = legacyRoutes[window.location.hash];
+      if (destination) window.location.replace(destination);
+    };
+    openLegacyPage();
+    window.addEventListener("hashchange", openLegacyPage);
+  </script>
 </Base>

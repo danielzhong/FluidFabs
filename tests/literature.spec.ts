@@ -33,7 +33,7 @@ function parseCsv(value: string): string[][] {
 test("published measurements filter by particle and zeta range and preserve selection across languages", async ({
   page,
 }) => {
-  await page.goto("./");
+  await page.goto("explorer/");
   const evidence = page.locator("#literature");
   const system = evidence.locator("#lit-system");
   const range = evidence.locator("#lit-range");
@@ -83,7 +83,7 @@ test("published measurements filter by particle and zeta range and preserve sele
 test("expanded literature table retains source-specific measurements and uncertainty definitions", async ({
   page,
 }) => {
-  await page.goto("./");
+  await page.goto("explorer/");
   const evidence = page.locator("#literature");
   await evidence
     .getByLabel("Particle system", { exact: true })
@@ -127,7 +127,7 @@ test("CSV download and JSON preserve all 12 published records, sources and missi
   request,
   baseURL,
 }) => {
-  await page.goto("./");
+  await page.goto("explorer/");
   const downloadEvent = page.waitForEvent("download");
   const link = page.getByRole("link", { name: "Download data CSV" });
   await expect(link).toHaveAttribute(

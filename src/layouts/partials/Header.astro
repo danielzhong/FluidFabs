@@ -4,13 +4,12 @@ import Icon from "../components/Icon.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
 import LanguageToggle from "../components/LanguageToggle.astro";
 import { withBase } from "../../lib/paths";
-const links = [
-  { label: "Platform", zh: "平台介绍", href: withBase("/#platform") },
-  { label: "Explorer", zh: "交互模型", href: withBase("/#explorer") },
-  { label: "Experiments", zh: "实验展示", href: withBase("/#experiments") },
-  { label: "Roadmap", zh: "开发路线", href: withBase("/#roadmap") },
-  { label: "Partners", zh: "合作交流", href: withBase("/#partners") },
-];
+import { navigation, isCurrentPage } from "../../config/navigation";
+const links = navigation.map((link) => ({
+  ...link,
+  href: withBase(link.path),
+  current: isCurrentPage(Astro.url.pathname, link.path),
+}));
 ---
 
 <header class="site-header">
@@ -22,7 +21,11 @@ const links = [
       data-zh-aria-label="主导航"
     >
       {links.map((link) => (
-        <a href={link.href} data-zh={link.zh}>
+        <a
+          href={link.href}
+          data-zh={link.zh}
+          aria-current={link.current ? "page" : undefined}
+        >
           {link.label}
         </a>
       ))}
@@ -57,7 +60,11 @@ const links = [
     hidden
   >
     {links.map((link) => (
-      <a href={link.href} data-zh={link.zh}>
+      <a
+        href={link.href}
+        data-zh={link.zh}
+        aria-current={link.current ? "page" : undefined}
+      >
         {link.label}
       </a>
     ))}
@@ -76,6 +83,21 @@ const links = [
     display: flex;
     align-items: center;
     gap: 12px;
+  }
+  :is(.desktop-nav, .mobile-nav) a[aria-current="page"] {
+    color: #1d4ed8;
+    font-weight: 650;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 7px;
+  }
+  .desktop-nav a[aria-current="page"]::after {
+    display: none;
+  }
+  :global(:root[data-theme="dark"])
+    :is(.desktop-nav, .mobile-nav)
+    a[aria-current="page"] {
+    color: #a9d4ff;
   }
   @media (max-width: 600px) {
     .header-actions {

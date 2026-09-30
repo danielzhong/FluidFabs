@@ -43,13 +43,13 @@ const directions = [
       <span class="eyebrow" data-zh="实验展示">
         EXPERIMENTS
       </span>
-      <h2 id="experiments-heading">
+      <h1 id="experiments-heading">
         <span class="experiment-heading-start" data-zh="从模型，">
           From models
         </span>
         <br />
         <span data-zh="走向实测。">to measurements.</span>
-      </h2>
+      </h1>
       <p data-zh="我们计划通过实验，将颗粒性质与实际观察到的传输行为联系起来，检验假设、理解差异，并为下一轮模型改进提供依据。">
         We’re planning experiments to connect particle properties with observed
         transport behavior. The goal is to test assumptions, understand
@@ -76,7 +76,7 @@ const directions = [
             {direction.number}
           </span>
           <div>
-            <h3 data-zh={direction.titleZh}>{direction.title}</h3>
+            <h2 data-zh={direction.titleZh}>{direction.title}</h2>
             <p data-zh={direction.textZh}>{direction.text}</p>
             <span class="experiment-focus" data-zh={direction.focusZh}>
               {direction.focus}
@@ -156,7 +156,7 @@ const directions = [
     font-variant-numeric: tabular-nums;
     padding-top: 5px;
   }
-  .experiment-row h3 {
+  .experiment-row h2 {
     font-size: 23px;
     line-height: 1.4;
   }
@@ -197,7 +197,7 @@ const directions = [
       gap: 16px;
       padding-block: 25px;
     }
-    .experiment-row h3 {
+    .experiment-row h2 {
       font-size: 22px;
     }
     .experiment-intro > p {

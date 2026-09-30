@@ -3,6 +3,40 @@ import AxeBuilder from "@axe-core/playwright";
 import { readFile } from "node:fs/promises";
 import { waitForMotion } from "./helpers";
 
+const pages = [
+  {
+    path: "platform/",
+    name: "Platform",
+    heading: /Particles\. Environments\. Time\.\s*One connected view\./,
+  },
+  {
+    path: "explorer/",
+    name: "Explorer",
+    heading: /Change the conditions\.\s*See the scenario\./,
+  },
+  {
+    path: "experiments/",
+    name: "Experiments",
+    heading: /From models\s*to measurements\./,
+  },
+  {
+    path: "roadmap/",
+    name: "Roadmap",
+    heading: /Start with visibility\.\s*Build toward validation\./,
+  },
+  {
+    path: "partners/",
+    name: "Partners",
+    heading:
+      /For the people doing the research\.\s*And the people backing it\./,
+  },
+  {
+    path: "faq/",
+    name: "FAQs",
+    heading: /Know the model\.\s*See what’s next\./,
+  },
+] as const;
+
 test("platform home and navigation render without photos, overflow or runtime errors", async ({
   page,
 }) => {
@@ -35,13 +69,102 @@ test("platform home and navigation render without photos, overflow or runtime er
   );
   for (const id of anchors)
     expect(await page.locator(`[id="${id}"]`).count()).toBe(1);
-  for (const section of ["platform", "explorer", "roadmap", "partners"])
-    await expect(page.locator(`section#${section}`)).toHaveCount(1);
+  await expect(page.locator(".page-card")).toHaveCount(5);
+  for (const route of [
+    "platform",
+    "explorer",
+    "experiments",
+    "roadmap",
+    "partners",
+  ]) {
+    await expect(page.locator(`.page-card[href$="/${route}/"]`)).toHaveCount(1);
+    await expect(page.locator(`section#${route}`)).toHaveCount(0);
+  }
   expect(errors).toEqual([]);
 });
 
+for (const destination of pages) {
+  test(`${destination.name} supports page navigation, refresh, back and direct loading`, async ({
+    page,
+    baseURL,
+  }) => {
+    const errors: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    const url = new URL(destination.path, baseURL);
+    const title = `${destination.name} — Fluid Fabs`;
+    const footerLink = () =>
+      page.locator(`.site-footer a[href="${url.pathname}"]`);
+    const verifyPage = async () => {
+      await expect(page).toHaveURL(url.href);
+      await expect(page).toHaveTitle(title);
+      await expect(page.locator("h1")).toHaveCount(1);
+      await expect(page.locator("h1")).toHaveText(destination.heading);
+      await expect(page.locator("html")).toHaveAttribute("lang", "en");
+      await expect(footerLink()).toHaveAttribute("aria-current", "page");
+      await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
+        "content",
+        title,
+      );
+      const currentHeaderLinks = page.locator(
+        '.site-header a[aria-current="page"]',
+      );
+      if (destination.path === "faq/") {
+        await expect(currentHeaderLinks).toHaveCount(0);
+      } else {
+        await expect(currentHeaderLinks).toHaveCount(2);
+        for (const link of await currentHeaderLinks.all())
+          await expect(link).toHaveAttribute("href", url.pathname);
+      }
+      await expect(page.locator("img")).toHaveCount(0);
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      ).toBe(true);
+      if (process.env.SITE_URL) {
+        const publicURL = new URL(url.pathname, process.env.SITE_URL).href;
+        await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+          "href",
+          publicURL,
+        );
+        await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
+          "content",
+          publicURL,
+        );
+      }
+    };
+
+    await page.goto("./");
+    const entry =
+      destination.path === "faq/"
+        ? footerLink()
+        : page.locator(`.page-card[href="${url.pathname}"]`);
+    await entry.click();
+    await verifyPage();
+    await page.reload();
+    await verifyPage();
+    await page.goBack();
+    await expect(page).toHaveURL(baseURL!);
+    await expect(page.locator(".page-card")).toHaveCount(5);
+    const response = await page.goto(url.href);
+    expect(response?.status()).toBe(200);
+    await verifyPage();
+    expect(errors).toEqual([]);
+  });
+}
+
+test("legacy explorer links resolve to the dedicated page", async ({
+  page,
+  baseURL,
+}) => {
+  await page.goto(new URL("#explorer", baseURL).href);
+  await expect(page).toHaveURL(new URL("explorer/", baseURL).href);
+  await expect(page).toHaveTitle("Explorer — Fluid Fabs");
+  await expect(page.locator("#particle-explorer")).toBeVisible();
+});
+
 test("FAQ answers expand and privacy page is available", async ({ page }) => {
-  await page.goto("./");
+  await page.goto("faq/");
   const faq = page.locator(".faq-item").first();
   await faq.locator("summary").click();
   await expect(faq).toHaveAttribute("open", "");
@@ -102,7 +225,7 @@ test("partnership inquiry validates, downloads an accurate brief and restores fo
 test("partner actions select the right intent, retain entries and allow update requests without context", async ({
   page,
 }) => {
-  await page.goto("./");
+  await page.goto("partners/");
   const dialog = page.locator("#project-dialog");
   await page
     .locator('#partners [data-project-interest="Biotech pilot"]')
@@ -163,6 +286,14 @@ test("mobile navigation opens, closes and restores keyboard focus", async ({
   ).toHaveValue("Biotech pilot");
   await page.keyboard.press("Escape");
   await expect(toggle).toBeFocused();
+  await toggle.click();
+  await nav.getByRole("link", { name: "Platform", exact: true }).click();
+  await expect(page).toHaveURL(/\/platform\/$/);
+  await expect(nav).not.toBeVisible();
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator('.desktop-nav a[aria-current="page"]')).toHaveText(
+    "Platform",
+  );
 });
 
 test("page and partnership dialog meet automated accessibility checks", async ({

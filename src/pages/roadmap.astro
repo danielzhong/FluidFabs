@@ -1,0 +1,86 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+const roadmap = [
+  {
+    stage: "01 / NOW",
+    stageZh: "01 / 当前",
+    title: "Explore the concept.",
+    titleZh: "探索模型概念。",
+    text: "Build a shared framework for particle properties, environmental conditions, and interpretable visualizations. This website pairs published particle measurements with an illustrative diffusion calculation.",
+    textZh:
+      "建立颗粒属性、环境条件与可解释可视化的共同框架。本网站将文献颗粒实测值与示意扩散计算并列呈现。",
+    status: "Concept & demonstration",
+    statusZh: "概念与交互演示",
+    current: true,
+  },
+  {
+    stage: "02 / NEXT",
+    stageZh: "02 / 下一步",
+    title: "Put it to the test.",
+    titleZh: "走向实验验证。",
+    text: "Work with research partners to define measurements, compare model outputs with bench data, and refine assumptions within a clearly defined use case.",
+    textZh:
+      "与研究伙伴共同定义测量方案，用实验数据检验模型输出，并在明确的应用场景中逐步校准假设。",
+    status: "Planned experimental validation",
+    statusZh: "规划中的实验验证",
+    current: false,
+  },
+  {
+    stage: "03 / LONGER TERM",
+    stageZh: "03 / 长期方向",
+    title: "Build toward translation.",
+    titleZh: "探索转化研究。",
+    text: "Investigate applications in drug-development workflows. Any future clinical use would require purpose-specific validation, relevant evidence, and appropriate review.",
+    textZh:
+      "探索在药物研发流程中的应用。未来如进入临床场景，需要针对具体用途完成验证、积累相关证据并经过适当审查。",
+    status: "Future research direction",
+    statusZh: "未来研究方向",
+    current: false,
+  },
+];
+---
+
+<PageLayout
+  name="Roadmap"
+  nameZh="开发路线"
+  description="Follow the Fluid Fabs development roadmap from concept demonstration to planned experimental validation and future translational research."
+  descriptionZh="了解 Fluid Fabs 从概念演示到规划中的实验验证，以及未来转化研究的开发路线。"
+>
+  <section class="section roadmap-section" id="roadmap">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow" data-zh="以证据推进研发">
+            A ROADMAP BUILT AROUND EVIDENCE
+          </span>
+          <h1 data-zh="从可视化开始。<br /><span>向验证迈进。</span>">
+            Start with visibility.
+            <br />
+            <span>Build toward validation.</span>
+          </h1>
+        </div>
+        <p data-zh="我们希望实验和未来转化研究能从这个方向中受益。每一步，都需要与所要支持的决策相匹配的证据。">
+          We want experiments and future translational research to benefit from
+          this approach. Each step needs evidence appropriate to the decisions
+          it is meant to support.
+        </p>
+      </div>
+      <div class="roadmap-grid">
+        {roadmap.map((item) => (
+          <article
+            class:list={["roadmap-card", { "roadmap-current": item.current }]}
+          >
+            <span class="roadmap-stage" data-zh={item.stageZh}>
+              {item.stage}
+            </span>
+            <h2 data-zh={item.titleZh}>{item.title}</h2>
+            <p data-zh={item.textZh}>{item.text}</p>
+            <span class="roadmap-status" data-zh={item.statusZh}>
+              {item.status}
+            </span>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</PageLayout>

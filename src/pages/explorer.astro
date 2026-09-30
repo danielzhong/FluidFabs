@@ -1,0 +1,58 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+import LiteratureEvidence from "../layouts/components/LiteratureEvidence.astro";
+import ParticleExplorer from "../layouts/components/ParticleExplorer.astro";
+import "../styles/literature.css";
+import "../styles/explorer.css";
+---
+
+<PageLayout
+  name="Explorer"
+  nameZh="交互模型"
+  description="Compare published particle measurements across media, then explore illustrative concentration profiles and diffusion times with explicit model assumptions."
+  descriptionZh="比较不同介质中的文献颗粒实测值，并在明确的模型假设下探索浓度分布与扩散时间示意计算。"
+>
+  <section
+    class="section explorer-section"
+    id="explorer"
+    aria-labelledby="explorer-heading"
+  >
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow" data-zh="交互式概念演示">
+            AN INTERACTIVE FIRST LOOK
+          </span>
+          <h1
+            id="explorer-heading"
+            data-zh="改变条件。<br /><span>观察情景如何变化。</span>"
+          >
+            Change the conditions.
+            <br />
+            <span>See the scenario.</span>
+          </h1>
+        </div>
+        <p data-zh="先查看可追溯的文献实测值，再调整明确标注的模型参数。把已知证据与待检验的计算放在同一个界面。">
+          Start with traceable published measurements, then adjust clearly
+          labeled model assumptions. See the evidence and explore a calculation
+          in one place.
+        </p>
+      </div>
+      <LiteratureEvidence />
+      <div class="calculation-intro">
+        <span class="eyebrow" data-zh="接下来，探索一个计算情景">
+          NEXT, EXPLORE A CALCULATED SCENARIO
+        </span>
+        <h2 data-zh="从报告粒径到示意扩散曲线。">
+          From reported size to illustrative diffusion.
+        </h2>
+        <p data-zh="以下曲线由公式计算，不是论文中的实测浓度或扩散时间。选择一条文献记录，并独立设置计算假设。">
+          These curves are calculated, not concentration or diffusion-time
+          measurements from the papers. Select a published record and set the
+          model assumptions independently.
+        </p>
+      </div>
+      <ParticleExplorer />
+    </div>
+  </section>
+</PageLayout>

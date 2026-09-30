@@ -1,0 +1,38 @@
+---
+import Base from "./Base.astro";
+import { site } from "../config/site";
+import { withBase } from "../lib/paths";
+import "../styles/platform.css";
+import "../styles/pages.css";
+interface Props {
+  name: string;
+  nameZh: string;
+  description: string;
+  descriptionZh: string;
+}
+const { name, nameZh, description, descriptionZh } = Astro.props;
+---
+
+<Base
+  title={`${name} — ${site.name}`}
+  titleZh={`${nameZh} — ${site.name}`}
+  description={description}
+  descriptionZh={descriptionZh}
+>
+  <div class="page-shell">
+    <nav
+      class="container page-breadcrumb"
+      aria-label="Breadcrumb"
+      data-zh-aria-label="面包屑导航"
+    >
+      <a href={withBase("/")} data-zh="首页">
+        Home
+      </a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page" data-zh={nameZh}>
+        {name}
+      </span>
+    </nav>
+    <slot />
+  </div>
+</Base>

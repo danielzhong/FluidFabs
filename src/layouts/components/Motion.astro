@@ -11,7 +11,7 @@
     [".research-strip > *", 55],
     [".section-heading > *", 90],
     [".literature-evidence, .calculation-intro, .particle-explorer", 0],
-    [".platform-card", 90],
+    [".platform-card, .page-card", 90],
     [".center-heading", 0],
     [".process-card", 100],
     [".process-bottom", 0],
@@ -87,7 +87,12 @@
 
   // Keep focused controls still and immediately visible during keyboard navigation.
   document.addEventListener("focusin", (event) => {
-    if (!(event.target instanceof Node)) return;
+    // Pointer focus must not snap a button away between pointerdown and click.
+    if (
+      !(event.target instanceof Element) ||
+      !event.target.matches(":focus-visible")
+    )
+      return;
     animations.forEach((element, animation) => {
       if (element.contains(event.target as Node)) animation.cancel();
     });

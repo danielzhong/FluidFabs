@@ -156,7 +156,7 @@ function halfHeightWidth(path: string) {
 
 test.describe("literature observation explorer", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("./");
+    await page.goto("explorer/");
     await expect(page.locator("#pe-observation")).toBeEnabled();
   });
 

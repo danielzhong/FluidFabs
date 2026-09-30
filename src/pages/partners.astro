@@ -1,0 +1,131 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+import Icon from "../layouts/components/Icon.astro";
+---
+
+<PageLayout
+  name="Partners"
+  nameZh="合作交流"
+  description="Discuss a biotech research pilot, request an investor walkthrough, or express interest in Fluid Fabs product updates."
+  descriptionZh="讨论生物科技研究试点、申请投资方演示，或表达对 Fluid Fabs 产品更新的兴趣。"
+>
+  <section class="section partners-section" id="partners">
+    <div class="container">
+      <div class="center-heading">
+        <span class="eyebrow" data-zh="一起定义下一步">
+          HELP SHAPE WHAT COMES NEXT
+        </span>
+        <h1 data-zh="为开展实验的人。<br /><span>也为支持探索的人。</span>">
+          For the people doing the research.
+          <br />
+          <span>And the people backing it.</span>
+        </h1>
+      </div>
+      <div class="partner-grid">
+        <article class="partner-card">
+          <span class="micro-label" data-zh="BIOTECH 与科研团队">
+            BIOTECH & RESEARCH TEAMS
+          </span>
+          <h2 data-zh="把你的研究问题带来。">
+            Bring a question worth testing.
+          </h2>
+          <p data-zh="一起讨论配方、介质或传输场景，定义输入数据和实验终点，探索一个可执行的模型试点。">
+            Discuss a formulation, medium, or transport scenario. Define the
+            inputs and experimental endpoints for a focused modeling pilot.
+          </p>
+          <button
+            class="text-button"
+            data-project-trigger
+            data-project-interest="Biotech pilot"
+          >
+            <span data-zh="申请合作试点">Explore a pilot</span>
+            <Icon name="arrow" size={19} />
+          </button>
+        </article>
+        <article class="partner-card">
+          <span class="micro-label" data-zh="投资方与战略伙伴">
+            INVESTORS & STRATEGIC PARTNERS
+          </span>
+          <h2 data-zh="看懂机会，也看懂下一步。">
+            Explore the opportunity in context.
+          </h2>
+          <p data-zh="通过概念演示了解研发方向，讨论技术假设、验证里程碑，以及从研究工具走向潜在应用的路径。">
+            Walk through the concept, research assumptions, and validation
+            milestones. Discuss the path from a research tool to potential
+            applications.
+          </p>
+          <button
+            class="text-button"
+            data-project-trigger
+            data-project-interest="Investor walkthrough"
+          >
+            <span data-zh="预约投资方演示">
+              Request an investor walkthrough
+            </span>
+            <Icon name="arrow" size={19} />
+          </button>
+        </article>
+      </div>
+      <div class="updates-card">
+        <div>
+          <span class="micro-label" data-zh="保持关注">
+            STAY IN THE LOOP
+          </span>
+          <h2 data-zh="跟随模型的下一步进展。">Follow the next chapter.</h2>
+          <p data-zh="留下联系方式，表达你对产品进展和未来试点开放的兴趣。">
+            Express your interest in product updates and future pilot
+            opportunities.
+          </p>
+        </div>
+        <button
+          class="button button-outline"
+          data-project-trigger
+          data-project-interest="Product updates"
+        >
+          <span data-zh="申请接收产品更新">Request product updates</span>
+          <Icon name="arrow" size={18} />
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-card model-cta">
+        <div class="cta-orbits" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="cta-copy">
+          <span class="eyebrow" data-zh="让研究问题，成为共同的下一步">
+            TURN A QUESTION INTO A SHARED NEXT STEP
+          </span>
+          <h2 data-zh="你希望<br /><span>看清什么？</span>">
+            What would you
+            <br />
+            <span>like to understand?</span>
+          </h2>
+          <p data-zh="带上你的研究问题、合作想法，或对这一方向的好奇。<br />一起讨论下一步。">
+            Bring your research question, partnership idea, or curiosity about
+            the direction.
+            <br />
+            Let’s explore the next step together.
+          </p>
+          <button
+            class="button button-white"
+            data-project-trigger
+            data-project-interest="Research partnership"
+          >
+            <span data-zh="开启交流">Start a conversation</span>
+            <Icon name="arrow" size={20} />
+          </button>
+        </div>
+        <div class="cta-equation" aria-hidden="true">
+          <span>ζ · D · t</span>
+          <p data-zh="属性 → 情景 → 证据">PROPERTIES → SCENARIOS → EVIDENCE</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</PageLayout>

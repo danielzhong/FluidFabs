@@ -3,6 +3,8 @@ import Logo from "../components/Logo.astro";
 import Icon from "../components/Icon.astro";
 import { site } from "../../config/site";
 import { withBase } from "../../lib/paths";
+import { navigation, isCurrentPage } from "../../config/navigation";
+const links = [...navigation, { label: "FAQs", zh: "常见问题", path: "/faq/" }];
 ---
 
 <footer class="site-footer">
@@ -11,29 +13,26 @@ import { withBase } from "../../lib/paths";
       <Logo />
       <p data-zh={site.taglineZh}>{site.tagline}</p>
     </div>
-    <div class="footer-links">
+    <nav
+      class="footer-links"
+      aria-label="Explore pages"
+      data-zh-aria-label="探索页面"
+    >
       <span class="footer-label" data-zh="探索">
         EXPLORE
       </span>
-      <a href={withBase("/#platform")} data-zh="平台介绍">
-        Platform
-      </a>
-      <a href={withBase("/#explorer")} data-zh="交互模型">
-        Explorer
-      </a>
-      <a href={withBase("/#experiments")} data-zh="实验展示">
-        Experiments
-      </a>
-      <a href={withBase("/#roadmap")} data-zh="开发路线">
-        Roadmap
-      </a>
-      <a href={withBase("/#partners")} data-zh="合作交流">
-        Partners
-      </a>
-      <a href={withBase("/#faq")} data-zh="常见问题">
-        FAQs
-      </a>
-    </div>
+      {links.map((link) => (
+        <a
+          href={withBase(link.path)}
+          data-zh={link.zh}
+          aria-current={
+            isCurrentPage(Astro.url.pathname, link.path) ? "page" : undefined
+          }
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
     <div class="footer-links">
       <span class="footer-label" data-zh="一起探索下一步">
         EXPLORE WHAT’S NEXT
@@ -60,8 +59,27 @@ import { withBase } from "../../lib/paths";
     <span data-zh="示意模型。研发中的平台。">
       Illustrative models. Platform in development.
     </span>
-    <a href={withBase("/privacy/")} data-zh="隐私说明">
+    <a
+      href={withBase("/privacy/")}
+      data-zh="隐私说明"
+      aria-current={
+        isCurrentPage(Astro.url.pathname, "/privacy/") ? "page" : undefined
+      }
+    >
       Privacy
     </a>
   </div>
 </footer>
+
+<style>
+  .site-footer a[aria-current="page"] {
+    color: #1d4ed8;
+    font-weight: 650;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+  }
+  :global(:root[data-theme="dark"]) .site-footer a[aria-current="page"] {
+    color: #a9d4ff;
+  }
+</style>

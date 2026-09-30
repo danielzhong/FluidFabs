@@ -1,0 +1,103 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+import Icon from "../layouts/components/Icon.astro";
+import ProcessCard from "../layouts/components/ProcessCard.astro";
+import { benefits, steps } from "../content/homepage/content";
+---
+
+<PageLayout
+  name="Platform"
+  nameZh="平台介绍"
+  description="Explore the Fluid Fabs particle-modeling concept and the proposed workflow connecting characterization, scenario modeling, and experiments."
+  descriptionZh="了解 Fluid Fabs 颗粒建模平台概念，以及连接颗粒表征、情景建模与实验验证的协作流程。"
+>
+  <section class="section platform-section" id="platform">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow" data-zh="我们正在构建什么">
+            THE PLATFORM WE’RE BUILDING
+          </span>
+          <h1 data-zh="颗粒、环境与时间。<br /><span>在同一个视角下理解。</span>">
+            Particles. Environments. Time.
+            <br />
+            <span>One connected view.</span>
+          </h1>
+        </div>
+        <p data-zh="帮助研发团队提出更清晰的实验问题，也让合作伙伴看懂模型假设、证据缺口与下一阶段的研发目标。">
+          Help research teams frame better experiments, and give partners a
+          clear view of assumptions, evidence gaps, and the next development
+          milestones.
+        </p>
+      </div>
+      <div class="platform-grid">
+        {benefits.map((benefit, index) => (
+          <article class="platform-card">
+            <div class="platform-card-top">
+              <Icon name={benefit.icon} size={26} />
+              <span>0{index + 1}</span>
+            </div>
+            <span class="micro-label" data-zh={benefit.zh.tag}>
+              {benefit.tag}
+            </span>
+            <h2 data-zh={benefit.zh.title}>{benefit.title}</h2>
+            <p data-zh={benefit.zh.text}>{benefit.text}</p>
+            <div class="platform-card-detail">
+              <span class="detail-dot"></span>
+              <span data-zh={benefit.zh.detail}>{benefit.detail}</span>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div class="platform-context">
+        <Icon name="sliders" size={22} />
+        <p data-zh="ζ 电位提供分组视角，而不是独立的扩散预测。我们希望结合粒径、测量介质和实验条件，逐步建立有数据依据的模型。">
+          Zeta potential offers a way to organize particles, not a standalone
+          diffusion prediction. Our direction is to bring particle size,
+          measurement medium, and experimental conditions into a model grounded
+          in data.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section process-section" id="workflow">
+    <div class="container">
+      <div class="center-heading">
+        <span class="eyebrow" data-zh="从研究问题开始">
+          START WITH A RESEARCH QUESTION
+        </span>
+        <h2 data-zh="表征。探索。检验。<br /><span>让建模与实验共同推进。</span>">
+          Characterize. Explore. Test.
+          <br />
+          <span>Connect models with experiments.</span>
+        </h2>
+        <p data-zh="我们设想的协作流程，从理解输入到检验输出。">
+          Our proposed collaboration workflow, from understanding inputs to
+          testing outputs.
+        </p>
+      </div>
+      <div class="process-grid">
+        {steps.map((step) => (
+          <ProcessCard {...step} />
+        ))}
+      </div>
+      <div class="process-bottom">
+        <span>
+          <Icon name="check" size={17} />
+          <span data-zh="先定义问题，再共同确定试点范围。">
+            Define the question first. Shape the pilot together.
+          </span>
+        </span>
+        <button
+          class="text-button"
+          data-project-trigger
+          data-project-interest="Biotech pilot"
+        >
+          <span data-zh="讨论一个研究场景">Discuss a research scenario</span>
+          <Icon name="arrow" size={20} />
+        </button>
+      </div>
+    </div>
+  </section>
+</PageLayout>

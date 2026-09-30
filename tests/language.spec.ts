@@ -6,7 +6,7 @@ import { waitForMotion } from "./helpers";
 test("language switches in place and persists independently of the theme across pages", async ({
   page,
 }) => {
-  await page.goto("./");
+  await page.goto("faq/");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   const faq = page.locator(".faq-item").first();
   await faq.locator("summary").click();
@@ -19,9 +19,8 @@ test("language switches in place and persists independently of the theme across 
     "data-navigation-marker",
     "same-page",
   );
-  await expect(page.locator("h1")).toHaveText(
-    /看见颗粒的变化。\s*找到下一步方向。/,
-  );
+  await expect(page.locator("h1")).toHaveText(/理解模型。\s*明确下一步。/);
+  await expect(page).toHaveTitle("常见问题 — Fluid Fabs");
   await expect(faq).toHaveAttribute("open", "");
   await expect(faq.locator("summary")).toContainText("正在开发什么");
   await page.getByRole("button", { name: "切换为浅色模式" }).click();
@@ -36,10 +35,75 @@ test("language switches in place and persists independently of the theme across 
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
 });
 
+test("Chinese titles, headings and active links persist through real page navigation", async ({
+  page,
+  baseURL,
+}) => {
+  const destinations = [
+    {
+      path: "platform/",
+      name: "平台介绍",
+      heading: /颗粒、环境与时间。\s*在同一个视角下理解。/,
+    },
+    {
+      path: "explorer/",
+      name: "交互模型",
+      heading: /改变条件。\s*观察情景如何变化。/,
+    },
+    {
+      path: "experiments/",
+      name: "实验展示",
+      heading: /从模型，\s*走向实测。/,
+    },
+    {
+      path: "roadmap/",
+      name: "开发路线",
+      heading: /从可视化开始。\s*向验证迈进。/,
+    },
+    {
+      path: "partners/",
+      name: "合作交流",
+      heading: /为开展实验的人。\s*也为支持探索的人。/,
+    },
+    { path: "faq/", name: "常见问题", heading: /理解模型。\s*明确下一步。/ },
+  ];
+  await page.goto("./");
+  await page.getByRole("button", { name: "Switch to Chinese" }).click();
+  for (const destination of destinations) {
+    const url = new URL(destination.path, baseURL);
+    const link = page.locator(`.site-footer a[href="${url.pathname}"]`);
+    await expect(link).toHaveText(destination.name);
+    await link.click();
+    await expect(page).toHaveURL(url.href);
+    await expect(page.locator("html")).toHaveAttribute("lang", "zh-CN");
+    await expect(page).toHaveTitle(`${destination.name} — Fluid Fabs`);
+    await expect(page.locator("h1")).toHaveCount(1);
+    await expect(page.locator("h1")).toHaveText(destination.heading);
+    await expect(link).toHaveAttribute("aria-current", "page");
+    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
+      "content",
+      `${destination.name} — Fluid Fabs`,
+    );
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+  }
+  await page.reload();
+  await expect(page).toHaveTitle("常见问题 — Fluid Fabs");
+  await page.goBack();
+  await expect(page).toHaveTitle("合作交流 — Fluid Fabs");
+  await expect(page.locator("html")).toHaveAttribute("lang", "zh-CN");
+  await page.getByRole("button", { name: "切换为英文" }).click();
+  await expect(page).toHaveTitle("Partners — Fluid Fabs");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+});
+
 test("switching language retains inquiry entries and downloads the selected intent in Chinese", async ({
   page,
 }) => {
-  await page.goto("./");
+  await page.goto("partners/");
   const trigger = page.locator(
     '#partners [data-project-interest="Investor walkthrough"]',
   );
@@ -76,8 +140,10 @@ test("language changes from another tab retain an open inquiry and its selected 
   context,
   baseURL,
 }) => {
-  await page.goto("./");
-  await page.locator(".hero-actions [data-project-trigger]").click();
+  await page.goto("partners/");
+  await page
+    .locator('#partners [data-project-interest="Biotech pilot"]')
+    .click();
   const dialog = page.locator("#project-dialog");
   await dialog.getByLabel("Your name").fill("Alex Chen");
   await dialog.getByLabel("Email address").fill("alex@example.com");
@@ -130,7 +196,7 @@ test("language controls work when browser storage is unavailable", async ({
 test("Chinese page, inquiry and light theme meet accessibility checks without overflow", async ({
   page,
 }) => {
-  await page.goto("./");
+  await page.goto("partners/");
   await page.getByRole("button", { name: "Switch to Chinese" }).click();
   const scan = async () => {
     await waitForMotion(page);
@@ -148,7 +214,9 @@ test("Chinese page, inquiry and light theme meet accessibility checks without ov
     ).toEqual([]);
   };
   await scan();
-  await page.locator(".hero-actions [data-project-trigger]").click();
+  await page
+    .locator('#partners [data-project-interest="Biotech pilot"]')
+    .click();
   await scan();
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "切换为浅色模式" }).click();

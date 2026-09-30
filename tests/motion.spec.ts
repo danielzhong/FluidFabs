@@ -4,7 +4,7 @@ test("scroll entrances settle, do not replay, and the reading indicator follows 
   page,
 }) => {
   await page.goto("./");
-  const card = page.locator(".platform-card").first();
+  const card = page.locator(".page-card").first();
   await card.scrollIntoViewIfNeeded();
   await expect(card).toHaveCSS("opacity", "1");
   await expect
@@ -57,7 +57,7 @@ test("reduced motion keeps all content visible and cancels effects when the pref
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("./");
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(page.locator(".platform-card").first()).toHaveCSS(
+  await expect(page.locator(".page-card").first()).toHaveCSS(
     "transform",
     "none",
   );
@@ -74,8 +74,8 @@ test("reduced motion keeps all content visible and cancels effects when the pref
       ),
     )
     .toBe(0);
-  await page.locator(".platform-card").last().scrollIntoViewIfNeeded();
-  await expect(page.locator(".platform-card").last()).toHaveCSS("opacity", "1");
+  await page.locator(".page-card").last().scrollIntoViewIfNeeded();
+  await expect(page.locator(".page-card").last()).toHaveCSS("opacity", "1");
   await page.reload();
   await expect(page.locator("h1")).toHaveCSS("opacity", "1");
   await expect(page.locator(".hero-halo")).toHaveCSS("animation-name", "none");
@@ -97,13 +97,16 @@ test("the concept, default charts, and model assumptions remain readable without
     reducedMotion: "reduce",
   });
   const page = await context.newPage();
-  await page.goto(baseURL!);
+  await page.goto(new URL("explorer/", baseURL).href);
   await expect(page.locator("h1")).toBeVisible();
   await expect(page.locator("#explorer")).toBeVisible();
   await expect(page.locator("#explorer svg").first()).toBeVisible();
-  await expect(page.locator("#roadmap")).toContainText(
-    "Concept & demonstration",
-  );
+  await expect(page.locator("#roadmap")).toHaveCount(0);
+  await expect(page.locator("#literature")).toContainText("+36 ± 6");
+  const methods = page.locator(".pe-methods");
+  await methods.locator("summary").click();
+  await expect(methods).toHaveAttribute("open", "");
+  await expect(methods).toContainText("Stokes–Einstein");
   await expect(page.locator("img")).toHaveCount(0);
   await context.close();
 });

@@ -24,7 +24,7 @@
   gap: 35px;
   margin-block: 28px;
 }
-.lit-heading h3 {
+.lit-heading h2 {
   font-size: 29px;
   margin-bottom: 12px;
 }
@@ -285,7 +285,7 @@
     flex-direction: column;
     gap: 7px;
   }
-  .lit-heading h3 {
+  .lit-heading h2 {
     font-size: 24px;
   }
   .lit-filters {
